@@ -1,16 +1,16 @@
 var secrets = require('../config/secrets');
 var nodemailer = require("nodemailer");
 var smtpTransport = nodemailer.createTransport('SMTP', {
-//  service: 'Mailgun',
-//  auth: {
-//    user: secrets.mailgun.login,
-//    pass: secrets.mailgun.password
-//  }
-  service: 'SendGrid',
+  service: 'Mailgun',
   auth: {
-       user: secrets.sendgrid.user,
-       pass: secrets.sendgrid.password
+    user: secrets.mailgun.login,
+    pass: secrets.mailgun.password
   }
+  // service: 'SendGrid',
+  // auth: {
+  //   user: secrets.sendgrid.user,
+  //   pass: secrets.sendgrid.password
+  // }
 });
 
 /**
@@ -47,8 +47,8 @@ exports.postContact = function(req, res) {
   var from = req.body.email;
   var name = req.body.name;
   var body = req.body.message;
-  var to = 'your@email.com';
-  var subject = 'API Example | Contact Form';
+  var to = 'tdy721@gmail.com';
+  var subject = 'BoundStar Hosting | Contact Form';
 
   var mailOptions = {
     to: to,
