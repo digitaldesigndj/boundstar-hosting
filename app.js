@@ -10,6 +10,9 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var expressValidator = require('express-validator');
 var connectAssets = require('connect-assets');
+// var request = require('request');
+// var fs = require('fs');
+// var _ = require('underscore');
 
 /**
  * Load controllers.
@@ -21,6 +24,8 @@ var apiController = require('./controllers/api');
 var contactController = require('./controllers/contact');
 var forgotController = require('./controllers/forgot');
 var resetController = require('./controllers/reset');
+
+var upgradeController  = require('./controllers/upgrade');
 
 /**
  * API keys + Passport configuration.
@@ -92,6 +97,11 @@ app.use(function(req, res) {
   res.render('404');
 });
 app.use(express.errorHandler());
+
+// Starbound Stuff
+
+app.get( '/upgrade', passportConf.isAuthenticated, upgradeController.upgradeForm );
+app.post( '/upgrade', passportConf.isAuthenticated, upgradeController.upgradePlayer );
 
 /**
  * Application routes.

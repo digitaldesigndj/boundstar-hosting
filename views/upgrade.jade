@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  .page-header
+    h3 title
+    p Use this interface to upgrade your player
+
+  form.form-horizontal(role='form', method='POST')
+    input(type='hidden', name='_csrf', value=token)
+    .form-group
+      label(class='col-sm-2 control-label', for='name') Character
+      .col-sm-8
+        input.form-control(type='text', name='name', id='name', autofocus=true)
+    .form-group
+      .col-sm-offset-2.col-sm-8
+        button.btn.btn-default(type='submit')
+          i.fa.fa-mail-forward
+          | Send
