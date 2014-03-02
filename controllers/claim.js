@@ -59,7 +59,7 @@ exports.claimPlayer = function ( req, res ) {
                     });
                   });
                 }
-              }); 
+              });
             });
           }
         }
