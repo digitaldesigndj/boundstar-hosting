@@ -14,12 +14,13 @@ var url = '/claim';
  */
 
 exports.claimForm = function(req, res){
-  res.render('claim', { title: 'Register' });
+  res.render('claim');
 }
 
 /**
  * POST /claim
  * Upgrades Starrybound players by placing them in a new group.
+ * @todo: check that character name has not already been claimed? or just check that they are in the 'guest' group before allowing a claim.
  */
 
 exports.claimPlayer = function ( req, res ) {
@@ -64,7 +65,7 @@ exports.claimPlayer = function ( req, res ) {
         }
       });
     } else {
-      req.flash('info', { msg: 'You need to login to the server at least once for this to work. Do that, logout and come back.' });
+      req.flash('info', { msg: 'Please check your spelling/capitalization. You need to login to the server at least once for this to work. Do that, logout and come back.' });
       return res.redirect( url );
     }
   });
