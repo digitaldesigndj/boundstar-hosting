@@ -14,10 +14,18 @@ block content
       label.col-sm-2.control-label(for='name') Name
       .col-sm-4
         input.form-control(type='text', name='name', id='name', value='#{user.profile.name}')
-    .form-group
-      label.col-sm-2.control-label(for='player') Character Name
-      .col-sm-4
-        input.form-control(type='text', name='player', id='player', value='#{user.profile.player}', readonly)
+    if user.profile.player
+      .form-group
+        label.col-sm-2.control-label(for='player') Character Name
+        .col-sm-4
+          input.form-control(type='text', name='player', id='player', value='#{user.profile.player}', readonly)
+    else
+      .form-group
+        .col-sm-offset-2.col-sm-4
+          a.btn.btn.btn-primary(href='/claim')
+            i.fa.fa-link
+            | Claim your Character
+
     .form-group
       label.col-sm-2.control-label(for='gender') Gender
       .col-sm-4
