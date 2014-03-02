@@ -6,23 +6,23 @@ var _ = require('underscore');
 var STARRYBOUND_PLAYERS_DIR = '/root/starbound/starrybound/players/';
 var SERVER_STATUS_ENDPOINT = 'http://boundstar.com/status/server/status';
 
-var url = '/upgrade';
+var url = '/claim';
 
 /**
- * GET /upgrade
+ * GET /claim
  * Upgrade player page
  */
 
-exports.upgradeForm = function(req, res){
-  res.render('upgrade', { title: 'Register' });
+exports.claimForm = function(req, res){
+  res.render('claim', { title: 'Register' });
 }
 
 /**
- * POST /upgrade
+ * POST /claim
  * Upgrades Starrybound players by placing them in a new group.
  */
 
-exports.upgradePlayer = function ( req, res ) {
+exports.claimPlayer = function ( req, res ) {
   req.assert('player', 'Character name cannot be blank').notEmpty();
   var errors = req.validationErrors();
   if (errors) {

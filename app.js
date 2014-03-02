@@ -25,7 +25,7 @@ var contactController = require('./controllers/contact');
 var forgotController = require('./controllers/forgot');
 var resetController = require('./controllers/reset');
 
-var upgradeController  = require('./controllers/upgrade');
+var claimController  = require('./controllers/claim');
 
 /**
  * API keys + Passport configuration.
@@ -100,8 +100,8 @@ app.use(express.errorHandler());
 
 // Starbound Stuff
 
-app.get( '/upgrade', passportConf.isAuthenticated, upgradeController.upgradeForm );
-app.post( '/upgrade', passportConf.isAuthenticated, upgradeController.upgradePlayer );
+app.get( '/claim', passportConf.isAuthenticated, claimController.claimForm );
+app.post( '/claim', passportConf.isAuthenticated, claimController.claimPlayer );
 
 /**
  * Application routes.
