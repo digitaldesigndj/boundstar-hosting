@@ -36,8 +36,8 @@ exports.claimPlayer = function ( req, res ) {
     if ( exists ) {
       request( SERVER_STATUS_ENDPOINT, function (error, response, body) {
         if (!error && response.statusCode == 200) {
-          data = JSON.parse( body );
-          if ( _.contains( data.playersOnline, player ) ) {
+          data = JSON.parse( body.toLowerCase );
+          if ( _.contains( data.playersonline, player ) ) {
             req.flash('info', { msg: 'You need to logout before we can promote you.' });
             return res.redirect( url );
           } else {
