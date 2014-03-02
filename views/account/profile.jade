@@ -14,6 +14,11 @@ block content
       label.col-sm-2.control-label(for='name') Name
       .col-sm-4
         input.form-control(type='text', name='name', id='name', value='#{user.profile.name}')
+    .form-group
+      label.col-sm-2.control-label(for='steam') Steam Name
+      .col-sm-4
+        input.form-control(type='text', name='steam', id='steam', value='#{user.profile.steam}')
+
     if user.profile.player
       .form-group
         label.col-sm-2.control-label(for='player') Character Name

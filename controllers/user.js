@@ -130,6 +130,7 @@ exports.postUpdateProfile = function(req, res, next) {
     user.email = req.body.email || '';
     user.profile.name = req.body.name || '';
     // user.profile.player = req.body.player || '';
+    user.profile.steam = req.body.steam || '';
     user.profile.gender = req.body.gender || '';
     user.profile.location = req.body.location || '';
     user.profile.website = req.body.website || '';
