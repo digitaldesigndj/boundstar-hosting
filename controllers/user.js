@@ -3,7 +3,8 @@ var _ = require('underscore');
 var User = require('../models/User');
 var fs = require('fs');
 
-var STARRYBOUND_PLAYERS_DIR = '/root/starbound/starrybound/players/';
+var STARRYBOUND_PLAYERS_DIR = process.env.STARRYBOUND_PLAYERS_DIR;
+
 /**
  * GET /login
  * Login page.

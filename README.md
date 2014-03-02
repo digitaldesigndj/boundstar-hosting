@@ -1,3 +1,10 @@
+## ENV Vars
+
+```bash
+export STARRYBOUND_PLAYERS_DIR='/root/starbound/starrybound/players/';
+export SERVER_STATUS_ENDPOINT='http://boundstar.com/status/server/status';
+```
+
 ![Alt](https://lh4.googleusercontent.com/-PVw-ZUM9vV8/UuWeH51os0I/AAAAAAAAD6M/0Ikg7viJftQ/w1286-h566-no/hackathon-starter-logo.jpg)
 Hackathon Starter [![Dependency Status](https://david-dm.org/sahat/hackathon-starter.png?theme=shields.io)](https://david-dm.org/sahat/hackathon-starter)
 =================

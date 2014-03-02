@@ -3,8 +3,8 @@ var User = require('../models/User');
 var request = require('request');
 var _ = require('underscore');
 
-var STARRYBOUND_PLAYERS_DIR = '/root/starbound/starrybound/players/';
-var SERVER_STATUS_ENDPOINT = 'http://boundstar.com/status/server/status';
+var STARRYBOUND_PLAYERS_DIR = process.env.STARRYBOUND_PLAYERS_DIR;
+var SERVER_STATUS_ENDPOINT = process.env.SERVER_STATUS_ENDPOINT;
 
 var url = '/claim';
 
