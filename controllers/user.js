@@ -1,7 +1,9 @@
 var passport = require('passport');
 var _ = require('underscore');
 var User = require('../models/User');
+var fs = require('fs');
 
+var STARRYBOUND_PLAYERS_DIR = '/root/starbound/starrybound/players/';
 /**
  * GET /login
  * Login page.
@@ -113,9 +115,27 @@ exports.postSignup = function(req, res, next) {
  * Profile page.
  */
 
+function getStarryBoundJSON( req, callback ) {
+  User.findById(req.user.id, function(err, user) {
+    if (err) return next(err);
+    if( user.profile.player !== '' ) {
+      var player_json = STARRYBOUND_PLAYERS_DIR + user.profile.player.toLowerCase() + '.json';
+      fs.readFile( player_json, 'utf8', function ( err, data ) {
+        if (err) { console.log('Error: ' + err); return; }
+        callback( JSON.parse(data) );
+      });
+    } else {
+      callback( '' );
+    }
+  });
+}
+
 exports.getAccount = function(req, res) {
-  res.render('account/profile', {
-    title: 'Account Management'
+  getStarryBoundJSON( req, function( sbdata ) {
+    res.render('account/profile', {
+      title: 'Account Management',
+      starrybound: sbdata
+    });
   });
 };
 

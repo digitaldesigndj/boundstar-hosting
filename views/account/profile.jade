@@ -31,6 +31,12 @@ block content
             i.fa.fa-link
             | Claim your Character
 
+    if starrybound
+      .form-group
+        label.col-sm-2.control-label(for='group') Rank
+        .col-sm-4
+          input.form-control(type='text', name='group', id='group', value='#{starrybound.groupName}', readonly)
+
     .form-group
       label.col-sm-2.control-label(for='gender') Gender
       .col-sm-4
