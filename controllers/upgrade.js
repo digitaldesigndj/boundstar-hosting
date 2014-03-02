@@ -29,7 +29,7 @@ exports.upgradePlayer = function ( req, res ) {
     return res.redirect( url );
   }
   var name = req.body.name;
-  var player_json = STARRYBOUND_PLAYERS_DIR + name + '.json';
+  var player_json = STARRYBOUND_PLAYERS_DIR + name.toLowerCase() + '.json';
   fs.exists( player_json, function (exists) {
     if ( exists ) {
       request( SERVER_STATUS_ENDPOINT, function (error, response, body) {
