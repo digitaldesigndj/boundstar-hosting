@@ -43,7 +43,7 @@ exports.postLogin = function(req, res, next) {
     req.logIn(user, function(err) {
       if (err) return next(err);
       req.flash('success', { msg: 'Success! You are logged in.' });
-      return res.redirect('/');
+      return res.redirect('/account');
     });
   })(req, res, next);
 };
