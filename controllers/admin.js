@@ -31,15 +31,12 @@ exports.postAdmin = function (req, res) {
 
   req.flash('success', { msg: 'You selected this script: ' + script });
 
-  var command = 'ls';
+  var command = 'cd ~; ls';
   if( script === 'restart' ) {
     command = 'bash ~/restart.sh';
   }
   if( script === 'backup' ) {
     command = 'bash ~/savespawn.sh';
-  }
-  if( script === 'website' ) {
-    command = 'bash ~/web_start.sh';
   }
 
   exec(command, function (error, stdout, stderr) { 
