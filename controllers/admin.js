@@ -1,6 +1,9 @@
+var sys = require('sys')
+var exec = require('child_process').exec;
+
 /**
- * GET /
- * Home page.
+ * GET /admin
+ * Admin page for selecting scripts to be run.
  */
 
 exports.getAdmin = function(req, res) {
@@ -9,7 +12,12 @@ exports.getAdmin = function(req, res) {
   });
 };
 
-exports.postAdmin = function(req, res) {
+/**
+ * POST /admin
+ * Runs Bash Scripts
+ */
+
+exports.postAdmin = function (req, res) {
   req.assert('script', 'Choose a script to run').notEmpty();
 
   var errors = req.validationErrors();
@@ -20,7 +28,28 @@ exports.postAdmin = function(req, res) {
   }
 
   var script = req.body.script;
-  console.log( script );
+
   req.flash('success', { msg: 'You selected this script: ' + script });
-  res.redirect('/admin');
+
+  var command = 'ls';
+  if( script === 'restart' ) {
+    command = 'bash ~/restart.sh';
+  }
+  if( script === 'backup' ) {
+    command = 'bash ~/savespawn.sh';
+  }
+  if( script === 'start' ) {
+    command = 'bash ~/web_start.sh';
+  }
+
+  exec(command, function (error, stdout, stderr) { 
+    if (error !== null) {
+      req.flash('errors', { msg: 'exec error: ' + error });
+    }
+    if (stderr !== '') {
+      req.flash('errors', { msg: 'stderr: ' + stderr });
+    }
+    req.flash('success', { msg: 'stdout: ' + stdout });
+    res.redirect('/admin');
+  });
 };
