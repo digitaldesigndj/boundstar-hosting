@@ -317,3 +317,13 @@ exports.isAuthorized = function(req, res, next) {
   if (_.findWhere(req.user.tokens, { kind: provider })) next();
   else res.redirect('/auth/' + provider);
 };
+
+/**
+ * Admins Only middleware.
+ */
+
+exports.isAdmin = function(req, res, next) {
+  if (req.isAuthenticated() && req.user.email === 'masondyoung@gmail.com') return next();
+  if (req.isAuthenticated() && req.user.email === 'tdy721@gmail.com') return next();
+  res.redirect('/login');
+};
