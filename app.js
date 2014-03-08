@@ -59,7 +59,7 @@ var day = (hour * 24);
 var week = (day * 7);
 var month = (day * 30);
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.MYPORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(connectAssets({
