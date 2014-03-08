@@ -38,7 +38,7 @@ exports.postAdmin = function (req, res) {
   if( script === 'backup' ) {
     command = 'bash ~/savespawn.sh';
   }
-  if( script === 'start' ) {
+  if( script === 'website' ) {
     command = 'bash ~/web_start.sh';
   }
 
