@@ -132,11 +132,14 @@ function getStarryBoundJSON( req, callback ) {
 }
 
 exports.getAccount = function(req, res) {
-  getStarryBoundJSON( req, function( sbdata ) {
-    res.render('account/profile', {
-      title: 'Account Management',
-      starrybound: sbdata
-    });
+  // getStarryBoundJSON( req, function( sbdata ) {
+  //   res.render('account/profile', {
+  //     title: 'Account Management',
+  //     starrybound: sbdata
+  //   });
+  // });
+  res.render('account/profile', {
+    title: 'Account Management'
   });
 };
 
