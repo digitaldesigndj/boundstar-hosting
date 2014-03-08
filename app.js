@@ -26,6 +26,7 @@ var forgotController = require('./controllers/forgot');
 var resetController = require('./controllers/reset');
 
 var claimController  = require('./controllers/claim');
+var adminController  = require('./controllers/admin');
 
 /**
  * API keys + Passport configuration.
@@ -102,6 +103,9 @@ app.use(express.errorHandler());
 
 app.get( '/claim', passportConf.isAuthenticated, claimController.claimForm );
 app.post( '/claim', passportConf.isAuthenticated, claimController.claimPlayer );
+
+app.get( '/admin', passportConf.isAdmin, adminController.getAdmin );
+app.post( '/admin', passportConf.isAdmin, adminController.postAdmin );
 
 /**
  * Application routes.

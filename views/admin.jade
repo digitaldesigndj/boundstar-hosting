@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1 Run Some Scripts
+  p.lead
+    | Badass Server Admin Tools
+
+    form.form-horizontal(role='form', method='POST')
+      input(type='hidden', name='_csrf', value=token)
+      .form-group(style='height: 43px;')
+        label(class='col-sm-2 control-label', for='script') Script
+        .col-sm-8
+          select.form-control(name='script', id='script')
+            option(value='') 
+            option(value='restart') Restart StarBound
+            option(value='backup') Backup Spawn
+            option(value='website') Start the Website
+      .form-group
+        .col-sm-offset-2.col-sm-8
+          button.btn.btn-default(type='submit')
+            i.fa.fa-mail-forward
+            | Execute
