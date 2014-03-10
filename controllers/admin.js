@@ -32,6 +32,9 @@ exports.postAdmin = function (req, res) {
   req.flash('success', { msg: 'You selected this script: ' + script });
 
   var command = 'cd ~; ls';
+  if( script === 'restore' ) {
+    command = 'bash ~/restorespawn.sh';
+  }
   if( script === 'restart' ) {
     command = 'bash ~/restart.sh';
   }
