@@ -1,0 +1,23 @@
+extends ../layout
+
+
+
+block content
+
+  include navigation
+
+  h1 #{title}
+  p.lead
+    | A list of everything
+  ul
+    for domain in domains
+      li= domain.name
+        ul
+          li id - #{domain.id}
+          li name - #{domain.name}
+          li ttl - #{domain.ttl}
+          li live_zone_file - #{domain.live_zone_file}
+          li error - #{domain.error}
+          li zone_file_with_error - #{domain.zone_file_with_error}
+    else
+      li sorry, no droplets!

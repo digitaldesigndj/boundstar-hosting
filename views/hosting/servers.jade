@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+  include navigation
+  h1 #{title}
+  p.lead
+    | The Metal List
+  ul
+    for droplet in droplets
+      li= droplet.name
+        ul
+          li id - #{droplet.id}
+          li name - #{droplet.name}
+          li image_id - #{droplet.image_id}
+          li size_id - #{droplet.size_id}
+          li region_id - #{droplet.region_id}
+          li backups_active - #{droplet.backups_active}
+          li ip_address - #{droplet.ip_address}
+          li private_ip_address - #{droplet.private_ip_address}
+          li locked - #{droplet.locked}
+          li status - #{droplet.status}
+          li created_at - #{droplet.created_at}
+    else
+      li sorry, no servers!

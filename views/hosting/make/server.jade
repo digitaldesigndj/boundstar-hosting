@@ -1,0 +1,31 @@
+image.jade  
+extends ../../layout
+
+block content
+  include ../navigation
+  h1 #{title}
+
+  // p=JSON.stringify(images)
+
+  p.lead
+    | Ha-Ha! Just kidding, they're SSD!
+    form.form-horizontal(role='form', method='POST')
+      input(type='hidden', name='_csrf', value=token)
+      .form-group
+        label(class='col-sm-2 control-label', for='name') Hostname
+        .col-sm-8
+          input.form-control(type='text', name='name', id='name', autofocus=true)
+          span .boundstar
+      .form-group(style='height: 43px;')
+        label(class='col-sm-2 control-label', for='image') Image
+
+        .col-sm-8
+          select.form-control(name='image', id='image')
+            option(value='')
+              for image in images
+                option(value='#{image.id}') #{image.name}
+      .form-group
+        .col-sm-offset-2.col-sm-8
+          button.btn.btn-default(type='submit')
+            i.fa.fa-mail-forward
+            | Execute

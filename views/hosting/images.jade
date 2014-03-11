@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+  include navigation
+  h1 #{title}
+  p.lead
+    | The Ghosts of Metal Past
+  ul
+    for image in images
+      //- li=JSON.stringify(image)
+      if !image.public
+        li= image.name
+          ul
+            li id - #{image.id}
+            li id - #{image.distribution}
+    else
+      li sorry, no images!

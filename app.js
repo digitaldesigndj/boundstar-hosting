@@ -27,6 +27,7 @@ var resetController = require('./controllers/reset');
 
 var claimController  = require('./controllers/claim');
 var adminController  = require('./controllers/admin');
+var digitalOceanController  = require('./controllers/digitalocean');
 
 /**
  * API keys + Passport configuration.
@@ -106,6 +107,19 @@ app.post( '/claim', passportConf.isAuthenticated, claimController.claimPlayer );
 
 app.get( '/admin', passportConf.isAdmin, adminController.getAdmin );
 app.post( '/admin', passportConf.isAdmin, adminController.postAdmin );
+
+app.get( '/hosting', passportConf.isAdmin, digitalOceanController.getIndex );
+app.get( '/hosting/servers', passportConf.isAdmin, digitalOceanController.getServers );
+app.get( '/hosting/images', passportConf.isAdmin, digitalOceanController.getImages );
+app.get( '/hosting/domains', passportConf.isAdmin, digitalOceanController.getDomains );
+
+app.get( '/hosting/make/image', passportConf.isAdmin, digitalOceanController.getMakeImage );
+app.post( '/hosting/make/image', passportConf.isAdmin, digitalOceanController.postMakeImage );
+app.get( '/hosting/make/server', passportConf.isAdmin, digitalOceanController.getMakeServer );
+app.post( '/hosting/make/server', passportConf.isAdmin, digitalOceanController.postMakeServer );
+
+
+
 
 /**
  * Application routes.

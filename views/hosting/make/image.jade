@@ -1,24 +1,24 @@
-extends layout
+image.jade  
+extends ../../layout
 
 block content
-
-  include hosting/navigation
-
-  h1 Run Some Scripts
+  include ../navigation
+  h1 #{title}
   p.lead
-    | Badass Server Admin Tools
-
+    | A new server for you!
     form.form-horizontal(role='form', method='POST')
       input(type='hidden', name='_csrf', value=token)
+      .form-group
+        label(class='col-sm-2 control-label', for='name') Name
+        .col-sm-8
+          input.form-control(type='text', name='name', id='name', autofocus=true)
       .form-group(style='height: 43px;')
-        label(class='col-sm-2 control-label', for='script') Script
+        label(class='col-sm-2 control-label', for='script') Image
         .col-sm-8
           select.form-control(name='script', id='script')
             option(value='')
-            option(value='restore') Restore Spawn also must Restart Starbound
-            option(value='restart') Restart StarBound
-            option(value='backup') Backup Spawn
-            option(value='ls') Test with "cd ~; ls"
+              for image in images
+                option(value='id') #{image.name}
       .form-group
         .col-sm-offset-2.col-sm-8
           button.btn.btn-default(type='submit')

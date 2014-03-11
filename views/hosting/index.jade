@@ -1,0 +1,47 @@
+extends layout
+
+block content
+  h1 #{title}
+
+  ul
+    for droplet in droplets
+      li= droplet.name
+        ul
+          li id - #{droplet.id}
+          li name - #{droplet.name}
+          li image_id - #{droplet.image_id}
+          li size_id - #{droplet.size_id}
+          li region_id - #{droplet.region_id}
+          li backups_active - #{droplet.backups_active}
+          li ip_address - #{droplet.ip_address}
+          li private_ip_address - #{droplet.private_ip_address}
+          li locked - #{droplet.locked}
+          li status - #{droplet.status}
+          li created_at - #{droplet.created_at}
+    else
+      li sorry, no droplets!
+
+  //- ul
+  //-   li
+  //-     a(href='/admin') Boundstar Admin
+  //-   li
+  //-     a(href='/server-admin') Server Admin
+  //-   li
+  //-     a(href='/claim') StarryBound Claim Page
+
+    //- form.form-horizontal(role='form', method='POST')
+    //-   input(type='hidden', name='_csrf', value=token)
+    //-   .form-group(style='height: 43px;')
+    //-     label(class='col-sm-2 control-label', for='script') Script
+    //-     .col-sm-8
+    //-       select.form-control(name='script', id='script')
+    //-         option(value='')
+    //-         option(value='restore') Restore Spawn also must Restart Starbound
+    //-         option(value='restart') Restart StarBound
+    //-         option(value='backup') Backup Spawn
+    //-         option(value='ls') Test with "cd ~; ls"
+    //-   .form-group
+    //-     .col-sm-offset-2.col-sm-8
+    //-       button.btn.btn-default(type='submit')
+    //-         i.fa.fa-mail-forward
+    //-         | Execute
