@@ -27,7 +27,12 @@ var resetController = require('./controllers/reset');
 
 var claimController  = require('./controllers/claim');
 var adminController  = require('./controllers/admin');
-var digitalOceanController  = require('./controllers/digitalocean');
+
+// var digitalOceanController  = require('./controllers/digitalocean/digitalocean');
+var doEvents  = require('./controllers/digitalocean/events');
+var doInfo  = require('./controllers/digitalocean/info');
+var doMakeServer  = require('./controllers/digitalocean/make-server');
+var doMakeImage  = require('./controllers/digitalocean/make-image');
 
 /**
  * API keys + Passport configuration.
@@ -108,16 +113,22 @@ app.post( '/claim', passportConf.isAuthenticated, claimController.claimPlayer );
 app.get( '/admin', passportConf.isAdmin, adminController.getAdmin );
 app.post( '/admin', passportConf.isAdmin, adminController.postAdmin );
 
-app.get( '/hosting', passportConf.isAdmin, digitalOceanController.getIndex );
-app.get( '/hosting/servers', passportConf.isAdmin, digitalOceanController.getServers );
-app.get( '/hosting/images', passportConf.isAdmin, digitalOceanController.getImages );
-app.get( '/hosting/domains', passportConf.isAdmin, digitalOceanController.getDomains );
+// Digital Ocean Info Pages
+app.get( '/hosting', passportConf.isAdmin, doInfo.getIndex );
+app.get( '/hosting/servers', passportConf.isAdmin, doInfo.getServers );
+app.get( '/hosting/images', passportConf.isAdmin, doInfo.getImages );
+app.get( '/hosting/domains', passportConf.isAdmin, doInfo.getDomains );
 
-app.get( '/hosting/make/image', passportConf.isAdmin, digitalOceanController.getMakeImage );
-app.post( '/hosting/make/image', passportConf.isAdmin, digitalOceanController.postMakeImage );
-app.get( '/hosting/make/server', passportConf.isAdmin, digitalOceanController.getMakeServer );
-app.post( '/hosting/make/server', passportConf.isAdmin, digitalOceanController.postMakeServer );
+// Digital Ocean Events Pages
+app.get( '/hosting/event', passportConf.isAdmin, doEvents.getEvent );
+app.get( '/hosting/event/json', passportConf.isAdmin, doEvents.getEventJson );
 
+// Digital Ocean Creation Pages
+app.get( '/hosting/make/image', passportConf.isAdmin, doMakeImage.getMakeImage );
+app.post( '/hosting/make/image', passportConf.isAdmin, doMakeImage.postMakeImage );
+app.get( '/hosting/make/server', passportConf.isAdmin, doMakeServer.getMakeServer );
+app.post( '/hosting/make/server', passportConf.isAdmin, doMakeServer.postMakeServer );
+// app.post( '/hosting/make/event', passportConf.isAdmin, digitalOceanController.postEvent );
 
 
 

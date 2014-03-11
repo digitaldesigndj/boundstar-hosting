@@ -1,7 +1,59 @@
-extends layout
+extends ../layout
 
 block content
+  include navigation
   h1 #{title}
+
+  p A new strategy for BoundStar!
+
+  ul
+    li A Public Vanilla Server!
+    li World Backups + Restores
+    li Protected Build Servers
+      ul
+        li CommandStar - Server Status Panel + Web API
+        li Ghost Website? - with vote buttons?
+        li TeamSpeak - Private Channels on BoundStar TeamSpeak
+        li Universe Syncing Features
+    li Server Control Panels
+      ul
+        li Restart Starbound
+        li Save A World
+        li Restart The Server
+        li Restart Your Web Services
+
+
+  h2 Monthly Servers
+
+  p $30/Month - 2x2Ghz Intel, 2GB RAM, 40GB SSD - Good for 4 players, capped at 8+2 admin
+  p $100/Month - 4x2Ghz Intel, 8GB RAM, 80GB SSD - Good for 10 players, capped at 18+2 admin
+
+  h2 Hourly Plans
+
+  p $10/Month - Keep an image when your server is down.
+  P Plus 50 small tokens, or 20 large tokens.
+
+  p (~10 cents/token) - 2x2Ghz Intel, 2GB RAM, 40GB SSD - Good for ~3 players, capped at 8+2 admin
+  p (~25 cents/token) - 4x2Ghz Intel, 8GB RAM, 80GB SSD - Good for ~8 players, capped at 18+2 admin
+
+  h2 Hourly Terms
+
+  ol
+    li 1 token to provision the server.
+    li 1 token per/hr.
+    li 1 token to take an image for later before shutting down the server.
+
+  h2 All Servers Come With:
+
+  p !! World Backup, BoundStar Universe Export Compatibilty !!
+  p Import planets from the - The Essential Guide to Planets and Moons
+  p Server Admin Powers
+  p Web Server Management Interface
+
+
+
+
+
 
   ul
     for droplet in droplets

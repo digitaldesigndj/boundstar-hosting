@@ -1,0 +1,52 @@
+image.jade  
+extends ../layout
+
+block content
+  include navigation
+  h1 #{title}
+
+  if event
+    p=JSON.stringify(event)
+
+  p.lead
+    | View an event
+    form.form-horizontal(role='form', method='POST')
+      input(type='hidden', name='_csrf', value=token)
+      .form-group
+        label(class='col-sm-2 control-label', for='event_id') Event Id
+        .col-sm-8
+          if event
+            input.form-control(type='text', name='event_id', id='event_id', autofocus=true, value='#{event.id}')
+          else
+            input.form-control(type='text', name='event_id', id='event_id', autofocus=true)
+      .form-group
+        .col-sm-offset-2.col-sm-8
+          button.btn.btn-default(type='submit')
+            i.fa.fa-mail-forward
+            | Update
+
+  script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+  script(src='/js/nanobar.min.js')
+  script.
+    var nanobar = new Nanobar({
+      bg: '#acf',
+      target: document.getElementById('myDivId'),
+      id: 'mynano',
+    });
+    nanobar.go(#{event.percentage});
+    // move bar
+    // nanobar.go( 0 ); // size bar 30%
+    $(function() {
+      $('#mynano').css({ top: '46px', height: '10px' });
+      window.setInterval(function(){
+        if( percentage === '100' ) {
+          window.location.href = '/hosting/event/json?id=18460664';
+        }
+        else {
+          $.getJSON('/hosting/event/json?id=18460664', function ( data ) {
+            console.log( data );
+            nanobar.go( parseInt( data.percentage ) );
+          });
+        }
+      }, 10000);
+    });
