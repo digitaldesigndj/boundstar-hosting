@@ -2,7 +2,7 @@ extends ../layout
 
 block content
 
-  //- ul
+  ul
     if droplet && droplet.status !== 'archive'
       li= droplet.name
         ul
@@ -20,7 +20,7 @@ block content
     else
       li sorry, no server!
 
-  //- .page-header
+  .page-header
     h3 Manage Server Information
     p Superpowers for now.
 
