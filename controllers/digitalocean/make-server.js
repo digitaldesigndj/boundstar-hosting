@@ -26,7 +26,7 @@ exports.postMakeServer = function (req, res) {
     if (err) return next(err);
     // Cant start new server!
     if( user.server.image !== '' ) { image = user.server.image; }
-    api.dropletNew( user.profile.domain + '.boundstar.com', 62, image, 4, {'ssh_key_ids': '87061,69732'}, function ( err, response ){
+    api.dropletNew( user.profile.domain + '.boundstar.com', 62, image, 4, {'ssh_key_ids': '87061,69732,93888'}, function ( err, response ){
       if( err ) { res.send( err ); }
       console.log( response );
       api.eventGet(response.event_id, function ( error, event ) {
