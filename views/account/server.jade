@@ -8,7 +8,8 @@ block content
     p reboots take about 30 seconds
     p taking a server image takes 2-10 min
     p starting a new server takes 2-5 min
-    img(src='https://i.imgur.com/RRfpIuS.gif')
+    style body{ background: url(/img/crazy_loop.gif); } .container { background: rgba(0,0,0,0.8); }
+    //- img(src='https://i.imgur.com/RRfpIuS.gif')
   else
 
     if droplet && droplet.status == 'active'
@@ -69,7 +70,7 @@ block content
       p
         form(action='/server/restore', method='POST')
           input(type='hidden', name='_csrf', value=token)
-          input(type='hidden', name='name', value='#{user.profile.name}')
+          input(type='hidden', name='domain', value='#{user.profile.domain}')
           button.btn.btn-primary(type='submit')
             i.fa.fa-cog-o
             |  Create Server

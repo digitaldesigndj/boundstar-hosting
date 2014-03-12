@@ -71,15 +71,15 @@ exports.dropletSnapshot = function(req, res) {
 //   // });
 // };
 
-exports.dropletRebuild = function(req, res) {
-  console.log( req.user.server.id );
-  api.dropletRebuild( req.user.server.id, function(err, event){
-    if (err) return err;
-    req.flash('success', { msg: JSON.stringify(event) + " - your event is processing, refresh the page in 10 seconds" });
-    res.redirect('/server');
-    // res.redirect('/hosting/event?id='+event);
-  });
-};
+// exports.dropletRebuild = function(req, res) {
+//   console.log( req.user.server.id );
+//   api.dropletRebuild( req.user.server.id, function(err, event){
+//     if (err) return err;
+//     req.flash('success', { msg: JSON.stringify(event) + " - your event is processing, refresh the page in 10 seconds" });
+//     res.redirect('/server');
+//     // res.redirect('/hosting/event?id='+event);
+//   });
+// };
 
 exports.dropletDestroy = function(req, res) {
   User.findById(req.user.id, function (err, user) {

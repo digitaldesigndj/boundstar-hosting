@@ -14,8 +14,7 @@ var userSchema = new mongoose.Schema({
 
   profile: {
     name: { type: String, default: '' },
-    steam: { type: String, default: '' },
-    player: { type: String, default: '' },
+    domain: { type: String, default: '' },
     gender: { type: String, default: '' },
     location: { type: String, default: '' },
     website: { type: String, default: '' },
@@ -23,13 +22,13 @@ var userSchema = new mongoose.Schema({
   },
 
   server: {
+    id: { type: String, default: '' },
     tokens: { type: String, default: '0' },
     size: { type: String, default: 'small' },
     image: { type: String, default: '' },
     password: { type: String, default: '' },
     host_name: { type: String, default: '' },
     ip_address: { type: String, default: '' },
-    id: { type: String, default: '' },
     snapshots: { type: String, default: '' }
   },
 

@@ -16,29 +16,25 @@ exports.getMakeServer = function (req, res) {
 };
 
 exports.postMakeServer = function (req, res) {
+  console.log( "AMEK SERVER")
   // size_id 66 = 512MB, 62 = 2GB
   // res.send( req.body );
   var image = '2629230';
   // Create Droplet
-  if( req.user.server.image !== '' ) {
-    image = req.user.server.image;
-  } 
   
-  api.dropletNew(req.body.name + '.boundstar.com', 62, image, 4, {'ssh_key_ids': '87061,69732'}, function ( err, response ){
-    if( err ) { res.send( err); }
-    console.log( response );
-    // console.log( response.event_id );
-
-    // Get Droplet Creation Event
-    api.eventGet(response.event_id, function ( error, event ) {
+  User.findById(req.user.id, function (err, user) {
+    if (err) return next(err);
+    // Cant start new server!
+    if( user.server.image !== '' ) { image = user.server.image; }
+    api.dropletNew( user.profile.domain + '.boundstar.com', 62, image, 4, {'ssh_key_ids': '87061,69732'}, function ( err, response ){
       if( err ) { res.send( err ); }
-      console.log( event );
-      console.log( event.droplet_id );
-
-      User.findById(req.user.id, function (err, user) {
-        if (err) return next(err);
+      console.log( response );
+      api.eventGet(response.event_id, function ( error, event ) {
+        if( err ) { res.send( err ); }
+        console.log( event );
+        console.log( event.droplet_id );
         api.dropletGet( event.droplet_id, function (err, droplet) {
-
+          if( err ) { res.send( err ); }
           console.log( droplet );
           user.server.id = droplet.id || '';
           user.server.token = req.body.token || '';
@@ -47,14 +43,14 @@ exports.postMakeServer = function (req, res) {
           user.server.host_name = droplet.name || '';
           user.server.ip_address = droplet.ip_address || '';
           user.server.snapshots = JSON.stringify(droplet.snapshots) || '';
-
           user.save(function (err) {
             if (err) return next(err);
             req.flash('success', { msg: 'Profile information updated.' });
-            res.redirect('server');
+            res.redirect('/server');
           });
         });
       });
+    });
 
       // Create DNS Record
       // For Later
@@ -72,6 +68,6 @@ exports.postMakeServer = function (req, res) {
       //   var new_server = _.findWhere( data, { name: req.body.name + '.boundstar.com' });
       //   console.log( new_server );
 
-    });
+    
   });
 };
