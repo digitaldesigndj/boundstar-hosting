@@ -23,6 +23,7 @@ exports.postScript = function (req, res) {
     return res.redirect('/server');
   }
 
+  var command = 'cd ~; ls';
   var script = req.body.script;
 
   req.flash('success', { msg: 'You selected this script: ' + script });
@@ -41,18 +42,11 @@ exports.postScript = function (req, res) {
       res.redirect('/server');
     });
   }
-
-
-
-  if( req.body.password != '' ) {
+  if( script === 'password' ) {
     starboundConfig.serverPasswords = [req.body.password];
-    var command = 'cd ~; ls';
-    if( script === 'password' ) {
-      console.log( starboundConfig )
-      fs.writeFileSync('/root/my/scripts/starbound.config', JSON.stringify( starboundConfig , null, 2 ) );
-      command = 'scp /root/my/scripts/starbound.config root@' + req.body.ip_address + ':/root/starbound/starbound.config;bash /root/my/scripts/remote.sh root@' + req.body.ip_address + " 'service starbound restart'";
-      // console.log( command );
-    }
+    console.log( starboundConfig )
+    fs.writeFileSync('/root/my/scripts/starbound.config', JSON.stringify( starboundConfig , null, 2 ) );
+    command = 'scp /root/my/scripts/starbound.config root@' + req.body.ip_address + ':/root/starbound/starbound.config;bash /root/my/scripts/remote.sh root@' + req.body.ip_address + " 'service starbound restart'";
     User.findById( req.user.id, function (err, user) {
       if (err) return next(err);
       user.server.password = req.body.password || '';
@@ -70,6 +64,11 @@ exports.postScript = function (req, res) {
         });
       });
     });
+  }
+
+
+  if( req.body.password != '' ) {
+    
   }else{
 
   }
