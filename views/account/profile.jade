@@ -19,12 +19,12 @@ block content
       .col-sm-4
         input.form-control(type='text', name='steam', id='steam', value='#{user.profile.steam}')
 
-    if user.profile.player
+    //- if user.profile.player
       .form-group
         label.col-sm-2.control-label(for='player') Character Name
         .col-sm-4
           input.form-control(type='text', name='player', id='player', value='#{user.profile.player}', readonly)
-    else
+    //- else
       .form-group
         .col-sm-offset-2.col-sm-4
           a.btn.btn.btn-primary(href='/claim')

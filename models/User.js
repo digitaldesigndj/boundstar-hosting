@@ -22,6 +22,17 @@ var userSchema = new mongoose.Schema({
     picture: { type: String, default: '' }
   },
 
+  server: {
+    tokens: { type: String, default: '0' },
+    size: { type: String, default: 'small' },
+    image: { type: String, default: '' },
+    password: { type: String, default: '' },
+    host_name: { type: String, default: '' },
+    ip_address: { type: String, default: '' },
+    id: { type: String, default: '' },
+    snapshots: { type: String, default: '' }
+  },
+
   resetPasswordToken: String,
   resetPasswordExpires: Date
 });

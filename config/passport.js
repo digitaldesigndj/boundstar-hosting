@@ -325,5 +325,6 @@ exports.isAuthorized = function(req, res, next) {
 exports.isAdmin = function(req, res, next) {
   if (req.isAuthenticated() && req.user.email === 'masondyoung@gmail.com') return next();
   if (req.isAuthenticated() && req.user.email === 'tdy721@gmail.com') return next();
+  if (req.isAuthenticated() && req.user.email === 'taylor@hyprtxt.com') return next();
   res.redirect('/login');
 };

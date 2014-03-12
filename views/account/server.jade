@@ -1,0 +1,219 @@
+extends ../layout
+
+block content
+
+  if droplet && droplet.locked
+    h2 The Server is locked because an event is processing. Please be patient.
+    p shutdowns take about 10 seconds
+    p reboots take about 30 seconds
+    p taking a server image takes 2-10 min
+    p starting a new server takes 2-5 min
+    img(src='https://i.imgur.com/RRfpIuS.gif')
+  else
+
+    if droplet && droplet.status == 'active'
+      h2 Server Active - #{droplet.ip_address}
+      p Created At $$$$$$$
+      p 2GB, 2x2GHz Intel @ $0.10/hour
+
+      h4.page-header Password
+      p Set your password, leave blank to make public, this will restart StarBound.
+        form.form-horizontal(action='/server/runscript', method='POST')
+          input(type='hidden', name='_csrf', value=token)
+          input(type='hidden', name='script', value='password')
+          input(type='hidden', name='ip_address', value='#{droplet.ip_address}')
+          .form-group
+            label.col-sm-2.control-label(for='password') Server Password
+            .col-sm-4
+              input.form-control(name='password', value='#{user.server.password}')
+          .form-group
+            .col-sm-offset-2.col-sm-4
+              button.btn.btn-primary(type='submit')
+                i.fa.fa-cog-o
+                | Set Password
+
+      if droplet
+        h4.page-header Server Image (Your Backup Slot)
+      if user.server.image
+        p Your Image Number Is: #{user.server.image}
+        p Image Created At: $$$$$$$
+      if droplet && droplet.status == 'active'
+        p You need to shutdown the server before you can take a new image.
+        p
+          a(href='/server/poweroff')
+            button.btn.btn-primary Shut Down Server
+
+      h4.page-header Troubleshoot
+      p Restart StarBound first, then try doing the Hardware Reboot.
+      p Step 1
+      p
+        form(action='/server/runscript', method='POST')
+          input(type='hidden', name='_csrf', value=token)
+          input(type='hidden', name='script', value='restart')
+          input(type='hidden', name='ip_address', value='#{droplet.ip_address}')
+          button.btn.btn-primary(type='submit')
+            i.fa.fa-cog-o
+            | Restart Starbound Process
+      if droplet && droplet.status == 'active'
+        p Step 2
+        p
+          a(href='/server/powercycle')
+            button.btn.btn-primary Hardware Reboot
+
+
+    if droplet && droplet.status == 'off'
+      h2 Server Inactive...
+
+    if !droplet
+      h2.page-header Welcome! To get started, create a server.
+      p
+        form(action='/server/restore', method='POST')
+          input(type='hidden', name='_csrf', value=token)
+          input(type='hidden', name='name', value='#{user.profile.name}')
+          button.btn.btn-primary(type='submit')
+            i.fa.fa-cog-o
+            |  Create Server
+
+    //- .page-header
+    //-   h3 Manage Server Information
+    //-   p Superpowers for now.
+
+    //- form.form-horizontal(action='/server', method='POST')
+    //-   input(type='hidden', name='_csrf', value=token)
+    //-   .form-group
+    //-     label.col-sm-2.control-label(for='tokens') Tokens
+    //-     .col-sm-4
+    //-       input.form-control(type='tokens', name='tokens', id='tokens', value='#{user.server.tokens}', readonly)
+    //-   .form-group
+    //-     label.col-sm-2.control-label(for='name') Name
+    //-     .col-sm-4
+    //-       input.form-control(type='text', name='name', id='name', value='#{user.profile.name}', readonly)
+    //-   .form-group
+    //-     label.col-sm-2.control-label(for='size') Size
+    //-     .col-sm-4
+    //-       if user.server.size == '66'
+    //-         input.form-control(type='text', name='size', id='size', value='512MB', readonly)
+    //-       else
+    //-         input.form-control(type='text', name='size', id='size', value='#{user.server.size}', readonly)
+    //-   .form-group
+    //-     label.col-sm-2.control-label(for='host_name') Hostname
+    //-     .col-sm-4
+    //-       input.form-control(type='text', name='host_name', id='host_name', value='#{user.server.host_name}', readonly)
+    //-   .form-group
+    //-     label.col-sm-2.control-label(for='ip_address') IP Address
+    //-     .col-sm-4
+    //-       input.form-control(type='text', name='ip_address', id='ip_address', value='#{user.server.ip_address}', readonly)
+    //-   .form-group
+    //-     label.col-sm-2.control-label(for='id') ID
+    //-     .col-sm-4
+    //-       input.form-control(type='text', name='id', id='id', value='#{user.server.id}', readonly)
+    //-   .form-group
+    //-     label.col-sm-2.control-label(for='image') Image
+    //-     .col-sm-4
+    //-       input.form-control(type='text', name='image', id='image', value='#{user.server.image}', readonly)
+    //-   .form-group
+    //-     label.col-sm-2.control-label(for='snapshots') Snapshots
+    //-     .col-sm-4
+    //-       input.form-control(type='text', name='snapshots', id='snapshots', value='#{JSON.stringify(user.server.snapshots)}', readonly)
+    //-   //- .form-group
+    //-   //-   .col-sm-offset-2.col-sm-4
+    //-   //-     button.btn.btn.btn-primary(type='submit')
+    //-   //-       i.fa.fa-magnet
+    //-   //-       | Update Server Info
+
+    //- ul
+    //-   if droplet && droplet.status !== 'archive'
+    //-     li= droplet.name
+    //-       ul
+    //-         li id - #{droplet.id}
+    //-         li name - #{droplet.name}
+    //-         li image_id - #{droplet.image_id}
+    //-         li size_id - #{droplet.size_id}
+    //-         li region_id - #{droplet.region_id}
+    //-         li backups_active - #{droplet.backups_active}
+    //-         li ip_address - #{droplet.ip_address}
+    //-         li private_ip_address - #{droplet.private_ip_address}
+    //-         li locked - #{droplet.locked}
+    //-         li status - #{droplet.status}
+    //-         li created_at - #{droplet.created_at}
+    //-   else
+    //-     li sorry, no server!
+
+    if droplet && droplet.status == 'off'
+      p
+        a(href='/server/poweron')
+          button.btn.btn-primary Power On Server
+      h4 
+      p
+        form(action='/server/snapshot', method='POST')
+          input(type='hidden', name='_csrf', value=token)
+          //- input(type='hidden', name='name', value='#{user.profile.name}')
+          //- input(type='hidden', name='image', value='#{user.server.image}')
+          button.btn.btn-warning(type='submit')
+            i.fa.fa-cog-o
+            | Take A New Image
+
+    //- if !droplet && user.server.image
+
+
+    if user.server.image && user.server.id !== '' && droplet.status == 'off'
+      p
+        a(href='/server/destroy')
+          button.btn.btn-primary Destroy Server
+
+    if !droplet && user.server.image
+      .page-header
+        h3 Restore Image to Server
+      form(action='/server/restore', method='POST')
+        input(type='hidden', name='_csrf', value=token)
+        input(type='hidden', name='name', value='#{user.profile.name}')
+        input(type='hidden', name='image', value='#{user.server.image}')
+        button.btn.btn-primary(type='submit')
+          i.fa.fa-cog-o
+          |  Restore Server
+      .page-header
+        h3 Start A Brand New Image on a Brand New Server
+      form(action='/server/restore', method='POST')
+        input(type='hidden', name='_csrf', value=token)
+        input(type='hidden', name='name', value='#{user.profile.name}')
+        button.btn.btn-primary(type='submit')
+          i.fa.fa-cog-o
+          |  Start New Server
+
+    br
+    br
+
+
+    //- if droplet && droplet.status == 'off' && JSON.stringify(user.server.snapshots) != '[]'
+    //-   p
+    //-     a(href='/server/restore')
+    //-       button.btn.btn-primary Restore Server
+    //-   p imageId
+    //-   p
+    //-     a(href='/server/rebuild')
+    //-       button.btn.btn-primary Rebuild Server
+    //-   p imageId
+      //- p
+      //-   a(href='/server/shutdown')
+      //-     button.btn.btn-primary Power Cycle Server
+
+
+    //- if secrets.localAuth
+    //-   .page-header
+    //-     h3 Change DNS!
+
+    //-   form.form-horizontal(action='/account/password', method='POST')
+    //-     input(type='hidden', name='_csrf', value=token)
+    //-     .form-group
+    //-       label.col-sm-3.control-label(for='password') Hostname
+    //-       .col-sm-4
+    //-         input.form-control(type='password', name='password', id='password')
+    //-     .form-group
+    //-       label.col-sm-3.control-label(for='confirmPassword') IP Address
+    //-       .col-sm-4
+    //-         input.form-control(type='password', name='confirmPassword', id='confirmPassword')
+    //-     .form-group
+    //-       .col-sm-offset-3.col-sm-4
+    //-         button.btn.btn.btn-primary(type='submit')
+    //-           i.fa.fa-keyboard-o
+    //-           | Change DNS Record
