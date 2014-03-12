@@ -29,7 +29,7 @@ exports.postScript = function (req, res) {
   req.flash('success', { msg: 'You selected this script: ' + script });
 
   if( script === 'restart' ) {
-    command = "rm /root/.ssh/known_hosts;bash /root/my/scripts/remote.sh root@" + req.body.ip_address + " 'service starbound restart'";
+    command = "bash /root/my/scripts/remote.sh root@" + req.body.ip_address + " 'service starbound restart'";
     console.log( command );
     exec(command, function (error, stdout, stderr) { 
       if (error !== null) {
@@ -45,8 +45,9 @@ exports.postScript = function (req, res) {
   if( script === 'password' ) {
     starboundConfig.serverPasswords = [req.body.password];
     console.log( starboundConfig )
+
     fs.writeFileSync('/root/my/scripts/starbound.config', JSON.stringify( starboundConfig , null, 2 ) );
-    command = 'rm /root/.ssh/known_hosts;scp /root/my/scripts/starbound.config root@' + req.body.ip_address + ':/root/starbound/starbound.config;bash /root/my/scripts/remote.sh root@' + req.body.ip_address + " 'service starbound restart'";
+    command = 'scp /root/my/scripts/starbound.config root@' + req.body.ip_address + ':/root/starbound/starbound.config;bash /root/my/scripts/remote.sh root@' + req.body.ip_address + " 'service starbound restart'";
     User.findById( req.user.id, function (err, user) {
       if (err) return next(err);
       user.server.password = req.body.password || '';
