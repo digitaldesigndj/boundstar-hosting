@@ -3,6 +3,8 @@ var fs = require('fs')
 var exec = require('child_process').exec;
 var starboundConfig = require('../config/starbound');
 var User = require('../models/User');
+
+
 /**
  * POST /admin
  * Runs Bash Scripts
@@ -24,6 +26,23 @@ exports.postScript = function (req, res) {
   var script = req.body.script;
 
   req.flash('success', { msg: 'You selected this script: ' + script });
+
+  if( script === 'restart' ) {
+    command = "bash /root/my/scripts/remote.sh root@" + req.body.ip_address + " 'service starbound restart'";
+    console.log( command );
+    exec(command, function (error, stdout, stderr) { 
+      if (error !== null) {
+        req.flash('errors', { msg: 'exec error: ' + error });
+      }
+      if (stderr !== '') {
+        req.flash('errors', { msg: 'stderr: ' + stderr });
+      }
+      req.flash('success', { msg: 'stdout: ' + stdout });
+      res.redirect('/server');
+    });
+  }
+
+
 
   if( req.body.password != '' ) {
     starboundConfig.serverPasswords = [req.body.password];
@@ -53,20 +72,5 @@ exports.postScript = function (req, res) {
     });
   }else{
 
-    if( script === 'restart' ) {
-      command = "bash /root/my/scripts/remote.sh root@" + req.body.ip_address + " 'service starbound restart'";
-      console.log( command );
-    }
-
-    exec(command, function (error, stdout, stderr) { 
-      if (error !== null) {
-        req.flash('errors', { msg: 'exec error: ' + error });
-      }
-      if (stderr !== '') {
-        req.flash('errors', { msg: 'stderr: ' + stderr });
-      }
-      req.flash('success', { msg: 'stdout: ' + stdout });
-      res.redirect('/server');
-    });
   }
 };
