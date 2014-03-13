@@ -99,6 +99,10 @@ exports.isAuthorized = function(req, res, next) {
   else res.redirect('/auth/' + provider);
 };
 
+/**
+ * Tokens Required middleware.
+ */
+
 exports.isNotBroke = function(req, res, next) {
   current_tokens = (Math.round(req.user.server.tokens*10)/10) - (Math.round((req.user.server.billed_seconds/3600)*10)/10);
   console.log( current_tokens );

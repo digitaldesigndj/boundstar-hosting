@@ -10,7 +10,7 @@ block content
       label.col-sm-3.control-label(for='email') Email
       .col-sm-7
         if query.email
-          input.form-control(type='email', name='email', id='email', placeholder='Email', value='#{query.email}', autofocus)
+          input.form-control(type='email', name='email', id='email', placeholder='Email', value='#{query.email}', readonly)
         else
           input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus)
     .form-group

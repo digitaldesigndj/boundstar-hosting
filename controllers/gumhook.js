@@ -15,7 +15,7 @@ var User = require('../models/User');
 exports.gumroadWebhook = function( req, res ) {
   if (req.user) return res.redirect('/?todo=AccountFoundAndWillBeCreditedThanksPage');
   res.set('Content-Type', 'text/plain');
-  return res.send("http://" + req.header('host') + "/signup?email="+req.body.email);
+  return res.send("http://" + req.header('host') + "/signup?email=" + req.body.email + "&name=" + req.body.name);
 }
 
 exports.purchase = function( req, res ) {
@@ -52,22 +52,6 @@ exports.purchase = function( req, res ) {
   });
 }
 
-// var mailOptions = {
-//   to: to,
-//   from: 'tdy721@gmail.com',
-//   subject: 'Thanks for your purchase',
-//   text: 'You get server tokens!' // body + '\n\n' + name
-// };
-
-// smtpTransport.sendMail(mailOptions, function(err) {
-//   if (err) {
-//     req.flash('errors', { msg: err.message });
-//     return res.redirect('/contact');
-//   }
-//   req.flash('success', { msg: 'Email has been sent successfully!' });
-//   res.redirect('/contact');
-// });
-
 exports.gumroadPurchaseCallback = function( req, res ) {
   console.log( req.body );  
   if ( req.body.test ) {
@@ -76,12 +60,6 @@ exports.gumroadPurchaseCallback = function( req, res ) {
   if ( req.body.seller_id === secrets.gumroad.seller_id ) {
     // && req.body.test != 'true' ) { ??
 
-    // User.findById(req.user.id, function (err, user) {
-    //   if (err) return next(err);
-    //   var stats = {};
-    //   console.log( user.server.tokens );
-    // });
-    
     var hash = crypto.createHash('md5').update(JSON.stringify(req.body)+Math.random()).digest("hex");
     // This is a purchase 
     var purchase = new Purchase({
@@ -95,32 +73,58 @@ exports.gumroadPurchaseCallback = function( req, res ) {
       price: req.body.price,
       currency: req.body.currency,
       order_number: req.body.order_number,
+      full_name: req.body.full_name || '',
       test: req.body.test || false
     });
 
-    // User.findOne({ email: req.body.email }, function(err, user) {
-    //   if( err ) {
-
-    //   }
-    //   else{
-    //     console.log(user);  
-    //   }
-    // });
-
-    // if( Find User with  req.body.email )
-    // Credit Now
-    // purchase.claimed = true;
-    // Send an email
-    // else 
-    // full_name: req.body.full_name || ''    
-
-    console.log( purchase );
-
-    purchase.save(function(err) {
-      if (err) { return err; }
-        console.log( 'purchase saved' );
-        res.send('ok');
-      /// return res.send("http://" + req.header('host') + "/account/credit/" + hash);
+    User.findOne({ email: req.body.email }, function(err, user) {
+      if (err) return next(err);
+      if( user != null ) {
+        console.log(user);
+        user.server.tokens = user.server.tokens + 10;
+        purchase.claimed = true;
+        purchase.save(function(err) {
+          if (err) { return err; }
+            console.log( 'purchase saved' );
+            user.save(function(err) {
+              console.log( 'user saved');
+              var mailOptions = {
+                to: req.body.email,
+                from: 'tdy721@gmail.com',
+                subject: 'Thanks for your purchase',
+                text: 'You bought server tokens! They have been added to your account: http://my.boundstar.com/purchase/' + hash
+              };
+              smtpTransport.sendMail(mailOptions, function(err) {
+                if (err) {
+                  req.flash('errors', { msg: err.message });
+                  return res.redirect('/server');
+                }
+                req.flash('success', { msg: 'Email has been sent successfully!' });
+                res.redirect('/server');
+              });
+            });
+        });
+      }else{
+        // EMailed Waiting
+        purchase.save(function(err) {
+          if (err) { return err; }
+            console.log( 'purchase saved' );
+            var mailOptions = {
+              to: req.body.email,
+              from: 'tdy721@gmail.com',
+              subject: 'Thanks for your purchase',
+              text: 'You bought server tokens! Register, then claim them with this url: http://my.boundstar.com/purchase/' + hash
+            };
+            smtpTransport.sendMail(mailOptions, function(err) {
+              if (err) {
+                req.flash('errors', { msg: err.message });
+                return res.redirect('/server');
+              }
+              req.flash('success', { msg: 'Email has been sent successfully!' });
+              res.redirect('/server');
+            });
+        });
+      }
     });
   }
   else {

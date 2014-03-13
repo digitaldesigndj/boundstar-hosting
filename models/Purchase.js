@@ -16,6 +16,7 @@ var purchaseSchema = new mongoose.Schema({
   // Locked to email address of registerd user?
   locked: { type: Boolean, default: false },
   test: { type: Boolean, default: false },
+  full_name: { type: String, default: '' },
 
   // If Confirmed by GumRoad
   seller_id: { type: String, default: '' },
