@@ -1,7 +1,8 @@
 // var User = require('../models/User');
 var crypto = require('crypto');
 exports.gumroadWebhook = function( req, res ) {
-  var hash = crypto.createHash('md5').update(1).digest("hex");
+  var hash = crypto.createHash('md5').update(JSON.stringify(req.body)).digest("hex");
+  console.log( hash );
   console.log( req.body );  
   console.log( req.header('host') );
   console.log( req.body['subdomain/username'] );
