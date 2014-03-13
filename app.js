@@ -127,7 +127,7 @@ app.use(express.errorHandler());
 
 
 app.post('/secret', gumhookController.gumroadWebhook);
-app.get('/account/credit/', gumhookController.createAccount);
+app.get('/account/credit/:hash', gumhookController.createAccount);
 
 
 // Starbound Stuff

@@ -172,21 +172,23 @@ block content
           input(type='hidden', name='_csrf', value=token)
           input(type='hidden', name='domain', value='#{user.profile.domain}')
           button.btn.btn-primary(type='submit')
-            i.fa.fa-cogs
+            i.fa.fa-lightbulb
             |  Create Server
 
     if droplet && droplet.status == 'off'
       p
-        a(href='/server/poweron')
-          button.btn.btn-primary Power On Server
+        form(action='/server/poweron', method='GET')
+          button.btn.btn-success(type='submit')
+            i.fa.fa-lightbulb-o
+            | Power On Server
       h2 
       p
         form(action='/server/snapshot', method='POST')
           input(type='hidden', name='_csrf', value=token)
           //- input(type='hidden', name='name', value='#{user.profile.name}')
           //- input(type='hidden', name='image', value='#{user.server.image}')
-          button.btn.btn-warning(type='submit')
-            i.fa.fa-cogs
+          button.btn.btn-info(type='submit')
+            i.fa.fa-save
             | Take A New Image
 
     //- if !droplet && user.server.image
@@ -195,9 +197,12 @@ block content
       P Taking an image will bring your server back up. Just shut it down again.
 
     if user.server.image && user.server.id !== '' && droplet.status == 'off'
+      h2
       p
-        a(href='/server/destroy')
-          button.btn.btn-primary Destroy Server
+        form(action='/server/destroy', method='GET')
+          button.btn.btn-danger(type='submit')
+            i.fa.fa-fire
+            | Destroy Server
 
     if !droplet && user.server.image
       .page-header
