@@ -99,6 +99,7 @@ app.use(function (req, res, next) {
   ];
   if (req.method !== 'POST') {
     next();
+    return;
   }
   if (whitelist.indexOf(req.url) !== -1) {
     next();
