@@ -26,7 +26,7 @@ var resetController = require('./controllers/reset');
 
 var claimController  = require('./controllers/claim');
 var adminController  = require('./controllers/admin');
-
+var gumhook = require('./controllers/gumhook');
 
 var scriptController  = require('./controllers/script');
 // var digitalOceanController  = require('./controllers/digitalocean/digitalocean');
@@ -108,6 +108,11 @@ app.use(function(req, res) {
   res.render('404');
 });
 app.use(express.errorHandler());
+
+
+app.post('/secret', gumhook.gumroadWebhook);
+app.get('/webhook-success', gumhook.createAccount);
+
 
 // Starbound Stuff
 
