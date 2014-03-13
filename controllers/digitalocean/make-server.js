@@ -16,7 +16,7 @@ exports.getMakeServer = function (req, res) {
 };
 
 exports.postMakeServer = function (req, res) {
-  console.log( "AMEK SERVER")
+  console.log( "Creating Server")
   // size_id 66 = 512MB, 62 = 2GB
   // res.send( req.body );
   var image = '2629230';
@@ -37,7 +37,9 @@ exports.postMakeServer = function (req, res) {
           if( err ) { res.send( err ); }
           console.log( droplet );
           user.server.id = droplet.id || '';
-          user.server.token = req.body.token || '';
+          // user.server.token = req.body.token || '';
+          // Subtract a token for spinning up the server
+          user.server.tokens = user.server.tokens - 1;
           user.server.image = req.body.image || '';
           user.server.size = droplet.size_id || '';
           user.server.host_name = droplet.name || '';

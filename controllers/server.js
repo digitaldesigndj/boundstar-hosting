@@ -2,32 +2,39 @@ var secrets = require('../config/secrets');
 var DigitalOceanAPI = require('digitalocean-api');
 var api = new DigitalOceanAPI(secrets.digitalocean.client_id, secrets.digitalocean.api_key);
 var _ = require('underscore');
-var _ = require('underscore');
 var User = require('../models/User');
 
 exports.getServer = function(req, res) {
   // Droplet
-  // console.log( req.user.server.id );
-  if( req.user.server.id != '' ) {
-    // User has a server
-    api.dropletGet( req.user.server.id , function (err, droplet) {
-      if (err) return err;
-      var stats = {};
-      var current_time = new Date().getTime()/1000
-      var created_time = new Date(droplet.created_at).getTime()/1000
-      stats.life = current_time - created_time;
-      stats.spent = ( stats.life/3600 ) + 1;
 
-      var droplet = droplet;
-      // console.log( droplet );
-      User.findById(req.user.id, function (err, user) {
-        if (err) return next(err);
-        if( droplet.snapshots != '' ) {
+  User.findById(req.user.id, function (err, user) {
+    if (err) return next(err);
+    var stats = {};
+    console.log( user.server.tokens );
+
+    var used_tokens = user.server.billed_seconds/3600;
+    stats.life = 0;
+    stats.spent = 0;
+
+    stats.tokens = stats.spent + ( - used_tokens ) + parseInt(user.server.tokens);
+    if( user.server.id != '' ) {
+      // User has a server
+      api.dropletGet( user.server.id , function (err, droplet) {
+        if (err) return err;
+        var stats = {};
+        var current_time = new Date().getTime()/1000
+        var created_time = new Date(droplet.created_at).getTime()/1000
+        stats.life = current_time - created_time;
+        stats.spent = ( stats.life/3600 ) + 1;
+        stats.tokens = stats.spent + used_tokens;
+        if( droplet.snapshots !== [] ) {
           user.server.image = _.last( droplet.snapshots ).id;
         }
-        user.server.id = droplet.id;
+        console.log( droplet.snapshots );
+        // user.server.image = 2629230;
+        user.server.tokens = -1;
         user.save(function (err) {
-          if (err) return next(err);
+          if (err) return err;
           // req.flash('success', { msg: 'Server information updated.' });
           res.render('account/server', {
             title: 'Server Management',
@@ -36,14 +43,19 @@ exports.getServer = function(req, res) {
           });
         });
       });
-    });
-  }
-  else{
-    res.render('account/server', {
-      title: 'Server Management',
-      droplet: false
-    });
-  }
+    }
+    else{
+      // user.server.tokens = -1;
+      // user.save(function (err) {
+      //   if (err) return err;
+        res.render('account/server', {
+          title: 'Server Management',
+          droplet: false,
+          stats: stats
+        });
+      // });
+    }
+  });
 };
 
 /**

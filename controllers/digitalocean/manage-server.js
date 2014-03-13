@@ -49,7 +49,7 @@ exports.dropletSnapshot = function(req, res) {
   User.findById(req.user.id, function (err, user) {
     if (err) return next(err);
 
-    user.profile.bil
+    // user.profile.bil
 
     api.dropletSnapshot( user.server.id, { name: user.profile.domain }, function (err, event_id) {
       if (err) return err;
@@ -89,17 +89,15 @@ exports.dropletDestroy = function(req, res) {
     api.dropletGet( user.server.id, function (err, droplet) {
       if (err) return err;
       // Save a billing entry here
-      var created_time = droplet.created_at;
+      var created_time = new Date(droplet.created_at).getTime()/1000;
       var current_time = new Date().getTime()/1000;
-      var server_lifetime =  current_time - created_at;
+      var server_lifetime =  current_time - created_time;
+      console.log( 'Server Destroyed' );
       console.log( created_time, current_time, server_lifetime );
-
-
-
       api.dropletDestroy( user.server.id, function (err, event) {
         if (err) return err;
         user.server.id = '';
-        user.profile.billed_seconds += server_lifetime;
+        user.server.billed_seconds = user.server.billed_seconds + server_lifetime;
         user.save(function (err) {
           if (err) return next(err);
           req.flash('warning', { msg: "SERVER DESTROYED" });
@@ -107,8 +105,6 @@ exports.dropletDestroy = function(req, res) {
         });
       });
     });
-
-
   });
 };
 
