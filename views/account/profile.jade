@@ -1,27 +1,28 @@
 extends ../layout
 
 block content
-  .page-header
-    h3 Profile Information
-
+  //- .page-header
+    h3 Set
     p=JSON.stringify(user, null, 2)
 
   if user.profile.domain === ''
+    h3.page-header Your Account
+    p Lets set your sever name first
     form.form-horizontal(action='/account/profile', method='POST')
       input(type='hidden', name='_csrf', value=token)
       .form-group
         label.col-sm-2.control-label(for='email') Email
         .col-sm-4
           input.form-control(type='email', name='email', id='email', value='#{user.email}', readonly)
-      .form-group
+      //- .form-group
         label.col-sm-2.control-label(for='name') Name
         .col-sm-4
           input.form-control(type='text', name='name', id='name', value='#{user.profile.name}', readonly)
       .form-group
         label.col-sm-2.control-label(for='domain') Server Name
         .col-sm-4
-          input.form-control(type='text', name='domain', id='domain', value='#{user.profile.domain}')
-      .form-group
+          input.form-control(type='text', name='domain', id='domain', value='#{user.profile.domain}', autofocus)
+      //- .form-group
         label.col-sm-2.control-label(for='image') Image
         .col-sm-4
           input.form-control(type='text', name='image', id='image', value='#{user.server.image}', readonly)
@@ -30,28 +31,31 @@ block content
         .col-sm-offset-2.col-sm-4
           button.btn.btn.btn-primary(type='submit')
             i.fa.fa-magnet
-            | Update Profile
+            | Set Server Name
   else
+    h3.page-header Your Profile
+    p
     form.form-horizontal
       .form-group
         label.col-sm-2.control-label(for='email') Email
         .col-sm-4
           input.form-control(type='email', name='email', id='email', value='#{user.email}', readonly)
-      .form-group
+      //- .form-group
         label.col-sm-2.control-label(for='name') Name
         .col-sm-4
           input.form-control(type='text', name='name', id='name', value='#{user.profile.name}', readonly)
       .form-group
-        label.col-sm-2.control-label(for='domain') Sub Domain
+        label.col-sm-2.control-label(for='domain') Server Name
         .col-sm-4
           input.form-control(type='text', name='domain', id='domain', value='#{user.profile.domain}', readonly)
-      .form-group
+      //- .form-group
         label.col-sm-2.control-label(for='image') Image
         .col-sm-4
           input.form-control(type='text', name='image', id='image', value='#{user.server.image}', readonly)
-    if user.server.id === ''
-      h1 We're All Set, Push The Button!
-      form.form-horizontal(action='/server/restore', method='POST')
+    //- if user.server.id === ''
+      h3 Create A Server!
+      p
+      form.form-horizontal(action='/server/boot', method='POST')
         input(type='hidden', name='_csrf', value=token)
         input(type='hidden', name='domain', value='#{user.profile.domain}')
         input(type='hidden', name='image', value='2629230')
@@ -60,11 +64,13 @@ block content
             button.btn.btn.btn-primary(type='submit')
               i.fa.fa-cogs
               | Create A Server (1 Token)
-    else
-      form.form-horizontal
+
+    form.form-horizontal
         .form-group
           .col-sm-offset-2.col-sm-4
-            a.btn.btn.btn-primary(href="/server") Manage Your Server
+            a.btn.btn.btn-primary(href="/server")
+              i.fa.fa-cogs
+              | Manage Your Server
 
 
 
@@ -88,39 +94,43 @@ block content
             i.fa.fa-keyboard-o
             | Change Password
 
-  .page-header
+  //- .page-header
     h3 Delete Account
 
-  p You can delete your account, but keep in mind this action is irreversible.
-  form(action='/account/delete', method='POST')
+  //- p You can delete your account, but keep in mind this action is irreversible.
+  //- form(action='/account/delete', method='POST')
     input(type='hidden', name='_csrf', value=token)
     button.btn.btn-danger(type='submit')
       i.fa.fa-trash-o
       | Delete my account
 
-  .page-header
-    h3 Linked Accounts
+  
 
   if secrets.googleAuth
-    if user.google
-      p: a.text-danger(href='/account/unlink/google') Unlink your Google account
-    else
-      p: a(href='/auth/google') Link your Google account
+    .page-header
+      h3 Linked Accounts
+      if user.google
+        p: a.text-danger(href='/account/unlink/google') Unlink your Google account
+      else
+        p: a(href='/auth/google') Link your Google account
+  else
+    br
+    br
 
-  if secrets.facebookAuth
-    if user.facebook
-      p: a.text-danger(href='/account/unlink/facebook') Unlink your Facebook account
-    else
-      p: a(href='/auth/facebook') Link your Facebook account
+  //- if secrets.facebookAuth
+  //-   if user.facebook
+  //-     p: a.text-danger(href='/account/unlink/facebook') Unlink your Facebook account
+  //-   else
+  //-     p: a(href='/auth/facebook') Link your Facebook account
 
-  if secrets.twitterAuth
-    if user.twitter
-      p: a.text-danger(href='/account/unlink/twitter') Unlink your Twitter account
-    else
-      p: a(href='/auth/twitter') Link your Twitter account
+  //- if secrets.twitterAuth
+  //-   if user.twitter
+  //-     p: a.text-danger(href='/account/unlink/twitter') Unlink your Twitter account
+  //-   else
+  //-     p: a(href='/auth/twitter') Link your Twitter account
 
-  if secrets.githubAuth
-    if user.github
-      p: a.text-danger(href='/account/unlink/github') Unlink your GitHub account
-    else
-      p: a(href='/auth/github') Link your GitHub account
+  //- if secrets.githubAuth
+  //-   if user.github
+  //-     p: a.text-danger(href='/account/unlink/github') Unlink your GitHub account
+  //-   else
+  //-     p: a(href='/auth/github') Link your GitHub account

@@ -25,7 +25,7 @@ exports.getServer = function(req, res) {
         var current_time = new Date().getTime()/1000;
         var created_time = new Date(droplet.created_at).getTime()/1000;
         // var image_time = 
-        stats.life = current_time - created_time;
+        stats.life = Math.round( current_time - created_time ) + ' seconds';
         stats.spent = ( stats.life/3600 ) + 1;
         stats.tokens = stats.spent + used_tokens;
         if( droplet.snapshots.length ) {

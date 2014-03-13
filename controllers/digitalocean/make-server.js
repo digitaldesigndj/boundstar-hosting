@@ -24,9 +24,9 @@ exports.postMakeServer = function (req, res) {
   // Create Droplet
   // Cant start new server!
   if( req.user.server.image !== '' ) { image = req.user.server.image; }
-  api.dropletNew( user.profile.domain + '.boundstar.com', 62, image, 4, {'ssh_key_ids': '87061,69732,93888'}, function ( err, response ){
+  api.dropletNew( req.user.profile.domain + '.boundstar.com', 62, image, 4, {'ssh_key_ids': '87061,69732,93888'}, function ( err, response ){
     if( err ) { res.send( err ); }
-    // console.log( response );
+    console.log( response );
     api.eventGet(response.event_id, function ( error, event ) {
       if( err ) { res.send( err ); }
       // console.log( event );
@@ -34,19 +34,23 @@ exports.postMakeServer = function (req, res) {
       api.dropletGet( event.droplet_id, function (err, droplet) {
         if( err ) { res.send( err ); }
         console.log( droplet );
-        req.user.server.id = droplet.id || '';
-        // req.user.server.token = req.body.token || '';
-        // Subtract a token for spinning up the server
-        req.user.server.tokens = req.user.server.tokens - 1;
-        req.user.server.image = req.body.image || '2629230';
-        req.user.server.size = droplet.size_id || '';
-        req.user.server.host_name = droplet.name || '';
-        req.user.server.ip_address = droplet.ip_address || '';
-        req.user.server.snapshots = JSON.stringify(droplet.snapshots) || '';
-        user.save(function (err) {
+        
+        User.findById(req.user.id, function (err, user) {
           if (err) return next(err);
-          req.flash('success', { msg: 'Profile information updated.' });
-          res.redirect('/server');
+          user.server.id = droplet.id || '';
+          // req.user.server.token = req.body.token || '';
+          // Subtract a token for spinning up the server
+          user.server.tokens = req.user.server.tokens - 1;
+          user.server.image = req.body.image || '2629230';
+          user.server.size = droplet.size_id || '';
+          user.server.host_name = droplet.name || '';
+          user.server.ip_address = droplet.ip_address || '';
+          user.server.snapshots = JSON.stringify(droplet.snapshots) || '';
+          user.save(function (err) {
+            if (err) return next(err);
+            req.flash('success', { msg: 'Booting Up A Server!' });
+            res.redirect('/server');
+          });
         });
       });
     });

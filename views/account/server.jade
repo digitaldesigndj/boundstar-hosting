@@ -2,7 +2,7 @@ extends ../layout
 
 block content
 
-  if droplet && droplet.status !== 'archive'
+  //- if droplet && droplet.status !== 'archive'
     ul
       li= droplet.name
         ul
@@ -18,10 +18,10 @@ block content
           li status - #{droplet.status}
           li created_at - #{droplet.created_at}
           li #{JSON.stringify(droplet.snapshots)}
-  else
+  //- else
     h2 sorry, no server!
 
-  if stats
+  if stats.tokens
     h2.page-header Balance
     p 
       form.form-horizontal
@@ -42,14 +42,29 @@ block content
             .col-sm-4
               input.form-control(type='spent', name='spent', id='spent', value='#{stats.spent}', readonly)      
 
+  if !droplet
+    h2.page-header To Get Started Create a Server.
+    p
+      form(action='/server/boot', method='POST')
+        input(type='hidden', name='_csrf', value=token)
+        input(type='hidden', name='domain', value='#{user.profile.domain}')
+        button.btn.btn-primary(type='submit')
+          i.fa.fa-gamepad
+          |  Vanilla Starbound
+          i.fa.fa-circle-o(style='margin-left: 10px;')
+          |  2x2GHz, 2GB
+          i.fa.fa-circle-o(style='margin-left: 10px;')
+          |  1 Token
+          i.fa.fa-circle-o(style='margin-left: 10px;')
+
     //- .form-group
       ul
         li current server has lived for: #{stats.life}
         li current server tokens spent: #{stats.spent}
         li current_tokens_estimate: #{stats.tokens}
 
-    h2.page-header Manage Server Information
-    p 
+    //- h2.page-header Manage Server Information
+    //- p 
       form.form-horizontal(action='/server', method='POST')
         input(type='hidden', name='_csrf', value=token)
         .form-group
@@ -165,16 +180,6 @@ block content
       h2.page-header Server Inactive...
       p
 
-    if !droplet
-      h2.page-header Welcome Back! To get started, create a server.
-      p
-        form(action='/server/restore', method='POST')
-          input(type='hidden', name='_csrf', value=token)
-          input(type='hidden', name='domain', value='#{user.profile.domain}')
-          button.btn.btn-primary(type='submit')
-            i.fa.fa-lightbulb
-            |  Create Server
-
     if droplet && droplet.status == 'off'
       p
         form(action='/server/poweron', method='GET')
@@ -204,24 +209,28 @@ block content
             i.fa.fa-fire
             | Destroy Server
 
-    if !droplet && user.server.image
+    //- if !droplet && user.server.image
+
+
+    if user.server.image != '2629230'
       .page-header
+        h2 You have a saved server image (beta)
+            .page-header
         h2 Restore Your Server Image - #{user.server.image}
-      form(action='/server/restore', method='POST')
+      form(action='/server/boot', method='POST')
         input(type='hidden', name='_csrf', value=token)
         input(type='hidden', name='name', value='#{user.profile.domain}')
         input(type='hidden', name='image', value='#{user.server.image}')
         button.btn.btn-primary(type='submit')
           i.fa.fa-cogs
           |  Restore Server
-      .page-header
-        h2 New Server Instead, Option Under Construction
+
 
 
 
       //- .page-header
         h2 Start A Brand New Image on a Brand New Server
-      //- form(action='/server/restore', method='POST')
+      //- form(action='/server/boot', method='POST')
         input(type='hidden', name='_csrf', value=token)
         input(type='hidden', name='name', value='#{user.profile.domain}')
         button.btn.btn-primary(type='submit')
@@ -234,7 +243,7 @@ block content
 
     //- if droplet && droplet.status == 'off' && JSON.stringify(user.server.snapshots) != '[]'
     //-   p
-    //-     a(href='/server/restore')
+    //-     a(href='/server/boot')
     //-       button.btn.btn-primary Restore Server
     //-   p imageId
     //-   p

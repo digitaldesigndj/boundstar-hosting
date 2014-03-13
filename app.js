@@ -92,6 +92,10 @@ app.use(express.session({
   })
 }));
 // app.use(express.csrf());
+// images Saveing
+// Finish Purchase Flow
+
+
 
 // app.use(function (req, res, next) {
 //   var whitelist = [
@@ -152,13 +156,21 @@ app.get( '/hosting/event/json', passportConf.isAdmin, doEvents.getEventJson );
 // Digital Ocean Creation Pages
 app.get( '/hosting/make/image', passportConf.isAdmin, doMakeImage.getMakeImage );
 app.post( '/hosting/make/image', passportConf.isAdmin, doMakeImage.postMakeImage );
-app.get( '/hosting/make/server', passportConf.isAdmin, doMakeServer.getMakeServer );
-app.post( '/hosting/make/server', passportConf.isAdmin, doMakeServer.postMakeServer );
-app.post( '/server/restore', passportConf.isAdmin, doMakeServer.postMakeServer );
+//app.get( '/hosting/make/server', passportConf.isAdmin, doMakeServer.getMakeServer );
+//app.post( '/hosting/make/server', passportConf.isAdmin, doMakeServer.postMakeServer );
+
+
+
+
+app.post( '/server/boot', passportConf.isAdmin, doMakeServer.postMakeServer );
+
+
+
 
 // app.post( '/hosting/make/event', passportConf.isAdmin, digitalOceanController.postEvent );
 
-app.get('/server', passportConf.isNotBroke, passportConf.isAuthenticated, serverController.getServer);
+// passportConf.isNotBroke,
+app.get('/server', passportConf.isAuthenticated, serverController.getServer);
 // app.post('/server', passportConf.isAuthenticated, serverController.postUpdateServer);
 
 

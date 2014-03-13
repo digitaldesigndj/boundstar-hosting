@@ -15,7 +15,7 @@ var User = require('../models/User');
 exports.gumroadWebhook = function( req, res ) {
   if (req.user) return res.redirect('/?todo=AccountFoundAndWillBeCreditedThanksPage');
   res.set('Content-Type', 'text/plain');
-  return res.send("http://" + req.header('host') + "/signup?email=" + req.body.email + "&name=" + req.body.name);
+  return res.send("http://" + req.header('host') + "/signup?email=" + req.body.email );//+ "&name=" + req.body.full_name);
 }
 
 exports.purchase = function( req, res ) {
@@ -55,7 +55,7 @@ exports.purchase = function( req, res ) {
 exports.gumroadPurchaseCallback = function( req, res ) {
   console.log( req.body );  
   if ( req.body.test ) {
-    console.log( ' THIS IS A TEST ' );
+    console.log( 'this was a test' );
   }
   if ( req.body.seller_id === secrets.gumroad.seller_id ) {
     // && req.body.test != 'true' ) { ??
@@ -86,6 +86,7 @@ exports.gumroadPurchaseCallback = function( req, res ) {
       if (err) return next(err);
       if( user != null ) {
         console.log(user);
+        user.profile.name = req.body.full_name;
         user.server.tokens = parseFloat(Math.round(10*user.server.tokens)/10)+10;
         purchase.claimed = true;
         purchase.save(function(err) {
