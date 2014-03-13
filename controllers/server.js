@@ -6,7 +6,7 @@ var User = require('../models/User');
 
 exports.getServer = function(req, res) {
   // Droplet
-
+  // 2629230
   User.findById(req.user.id, function (err, user) {
     if (err) return next(err);
     var stats = {};
@@ -17,41 +17,46 @@ exports.getServer = function(req, res) {
     stats.spent = 0;
 
     stats.tokens = stats.spent + ( - used_tokens ) + parseInt(user.server.tokens);
-    if( user.server.id != '' ) {
+    if ( user.server.id != '' ) {
       // User has a server
       api.dropletGet( user.server.id , function (err, droplet) {
         if (err) return err;
         var stats = {};
-        var current_time = new Date().getTime()/1000
-        var created_time = new Date(droplet.created_at).getTime()/1000
+        var current_time = new Date().getTime()/1000;
+        var created_time = new Date(droplet.created_at).getTime()/1000;
+        var image_time = 
         stats.life = current_time - created_time;
         stats.spent = ( stats.life/3600 ) + 1;
         stats.tokens = stats.spent + used_tokens;
-        if( droplet.snapshots !== [] ) {
+        if( droplet.snapshots.length ) {
           user.server.image = _.last( droplet.snapshots ).id;
+          api.imageGet( user.server.image, function ( err, image ) {
+            res.render('account/server', {
+              title: 'Server Management',
+              droplet: droplet,
+              stats: stats,
+              image: image
+            });
+          });
         }
-        console.log( droplet.snapshots );
-        // user.server.image = 2629230;
-        user.server.tokens = -1;
-        user.save(function (err) {
-          if (err) return err;
-          // req.flash('success', { msg: 'Server information updated.' });
+        else{
           res.render('account/server', {
             title: 'Server Management',
             droplet: droplet,
-            stats: stats
+            stats: stats,
+            image: false
           });
-        });
+        }
       });
     }
-    else{
-      // user.server.tokens = -1;
+    else {
       // user.save(function (err) {
       //   if (err) return err;
         res.render('account/server', {
           title: 'Server Management',
           droplet: false,
-          stats: stats
+          stats: stats,
+          image: false
         });
       // });
     }

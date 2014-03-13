@@ -127,14 +127,16 @@ block content
           .form-group
             .col-sm-offset-2.col-sm-4
               button.btn.btn-primary(type='submit')
-                i.fa.fa-cog-o
+                i.fa.fa-cogs
                 | Set Password
 
       if droplet
         h2.page-header Server Image (Your Backup Slot)
       if user.server.image
         p Your Image Number Is: #{user.server.image}
-        p Image Created At: $$$$$$$
+      if image
+        p=JSON.stringify(image)
+
       if droplet && droplet.status == 'active'
         p You need to shutdown the server before you can take a new image.
         p
@@ -150,7 +152,7 @@ block content
           input(type='hidden', name='script', value='restart')
           input(type='hidden', name='ip_address', value='#{droplet.ip_address}')
           button.btn.btn-primary(type='submit')
-            i.fa.fa-cog-o
+            i.fa.fa-cogs
             | Restart Starbound Process
       if droplet && droplet.status == 'active'
         p Step 2
@@ -170,7 +172,7 @@ block content
           input(type='hidden', name='_csrf', value=token)
           input(type='hidden', name='domain', value='#{user.profile.domain}')
           button.btn.btn-primary(type='submit')
-            i.fa.fa-cog-o
+            i.fa.fa-cogs
             |  Create Server
 
     if droplet && droplet.status == 'off'
@@ -184,7 +186,7 @@ block content
           //- input(type='hidden', name='name', value='#{user.profile.name}')
           //- input(type='hidden', name='image', value='#{user.server.image}')
           button.btn.btn-warning(type='submit')
-            i.fa.fa-cog-o
+            i.fa.fa-cogs
             | Take A New Image
 
     //- if !droplet && user.server.image
@@ -205,7 +207,7 @@ block content
         input(type='hidden', name='name', value='#{user.profile.domain}')
         input(type='hidden', name='image', value='#{user.server.image}')
         button.btn.btn-primary(type='submit')
-          i.fa.fa-cog-o
+          i.fa.fa-cogs
           |  Restore Server
       .page-header
         h2 New Server Instead, Option Under Construction
@@ -218,7 +220,7 @@ block content
         input(type='hidden', name='_csrf', value=token)
         input(type='hidden', name='name', value='#{user.profile.domain}')
         button.btn.btn-primary(type='submit')
-          i.fa.fa-cog-o
+          i.fa.fa-cogs
           |  Start New Server
 
     br
