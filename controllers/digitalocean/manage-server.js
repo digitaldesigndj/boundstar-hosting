@@ -97,7 +97,7 @@ exports.dropletDestroy = function(req, res) {
       api.dropletDestroy( user.server.id, function (err, event) {
         if (err) return err;
         user.server.id = '';
-        user.server.billed_seconds = user.server.billed_seconds + server_lifetime;
+        user.server.billed_seconds = Math.round(user.server.billed_seconds) + Math.round(server_lifetime);
         user.save(function (err) {
           if (err) return next(err);
           req.flash('warning', { msg: "SERVER DESTROYED" });
