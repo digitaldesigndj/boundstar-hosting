@@ -24,12 +24,10 @@ var userSchema = new mongoose.Schema({
   server: {
     id: { type: String, default: '' },
     tokens: { type: String, default: '0' },
+    billed_seconds: { type: String, default: '0' },
     size: { type: String, default: 'small' },
-    image: { type: String, default: '' },
+    image: { type: String, default: '2629230' }, //Starbound with htop
     password: { type: String, default: '' },
-    host_name: { type: String, default: '' },
-    ip_address: { type: String, default: '' },
-    snapshots: { type: String, default: '' }
   },
 
   resetPasswordToken: String,

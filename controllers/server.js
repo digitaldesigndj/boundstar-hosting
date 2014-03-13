@@ -9,8 +9,15 @@ exports.getServer = function(req, res) {
   // Droplet
   // console.log( req.user.server.id );
   if( req.user.server.id != '' ) {
+    // User has a server
     api.dropletGet( req.user.server.id , function (err, droplet) {
       if (err) return err;
+      var stats = {};
+      var current_time = new Date().getTime()/1000
+      var created_time = new Date(droplet.created_at).getTime()/1000
+      stats.life = current_time - created_time;
+      stats.spent = ( stats.life/3600 ) + 1;
+
       var droplet = droplet;
       // console.log( droplet );
       User.findById(req.user.id, function (err, user) {
@@ -24,7 +31,8 @@ exports.getServer = function(req, res) {
           // req.flash('success', { msg: 'Server information updated.' });
           res.render('account/server', {
             title: 'Server Management',
-            droplet: droplet
+            droplet: droplet,
+            stats: stats
           });
         });
       });
@@ -43,24 +51,15 @@ exports.getServer = function(req, res) {
  * Update profile information.
  */
 
+
+
 exports.postUpdateServer = function(req, res, next) {
   User.findById(req.user.id, function (err, user) {
     if (err) return next(err);
     console.log( req.body );
     api.dropletGet( req.body.id, function (err, droplet) {
-
-      // user.server.id = req.body.id || '';
-      // user.server.image = req.body.image || '';
-      // user.server.image = _.last( droplet.snapshots ).id;
-      // user.server.id = droplet.id;
-      // user.server.id = droplet.id || '';
-      // user.server.token = req.body.token || '';
-      // user.server.image = req.body.image || '';
-      // user.server.size = droplet.size_id || '';
-      // user.server.host_name = droplet.name || '';
-      // user.server.ip_address = droplet.ip_address || '';
-      // user.server.snapshots = JSON.stringify(droplet.snapshots) || '';
-
+      user.server.id = droplet.id || '';
+      user.server.token = req.body.token || '';
       user.save(function (err) {
         if (err) return next(err);
         // req.flash('success', { msg: 'Profile information updated.' });
@@ -70,6 +69,7 @@ exports.postUpdateServer = function(req, res, next) {
   });
 };
 
+// // Admins only
 
 // exports.postUpdateServer = function(req, res, next) {
 //   // Droplet

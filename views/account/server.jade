@@ -2,7 +2,7 @@ extends ../layout
 
 block content
 
-  //- ul
+  ul
     if droplet && droplet.status !== 'archive'
       li= droplet.name
         ul
@@ -17,35 +17,44 @@ block content
           li locked - #{droplet.locked}
           li status - #{droplet.status}
           li created_at - #{droplet.created_at}
+        ul
+          li lived_for - #{stats.life}
+          li estimated_tokens_spent - #{stats.spent}
     else
       li sorry, no server!
 
-  //- .page-header
+  .page-header
     h3 Manage Server Information
     p Superpowers for now.
 
     form.form-horizontal(action='/server', method='POST')
       input(type='hidden', name='_csrf', value=token)
       .form-group
+        label.col-sm-2.control-label(for='name') Name
+        .col-sm-4
+          input.form-control(type='text', name='name', id='name', value='#{user.profile.name}', readonly)
+      .form-group
         label.col-sm-2.control-label(for='tokens') Tokens
         .col-sm-4
           input.form-control(type='tokens', name='tokens', id='tokens', value='#{user.server.tokens}', readonly)
       .form-group
-        label.col-sm-2.control-label(for='name') Name
+        label.col-sm-2.control-label(for='billed_seconds') Billed Seconds
         .col-sm-4
-          input.form-control(type='text', name='name', id='name', value='#{user.profile.name}', readonly)
+          input.form-control(type='billed_seconds', name='billed_seconds', id='billed_seconds', value='#{user.server.billed_seconds}', readonly)
       .form-group
         label.col-sm-2.control-label(for='size') Size
         .col-sm-4
           if user.server.size == '66'
             input.form-control(type='text', name='size', id='size', value='512MB', readonly)
+          else if user.server.size == '62'
+            input.form-control(type='text', name='size', id='size', value='2GB', readonly)
           else
             input.form-control(type='text', name='size', id='size', value='#{user.server.size}', readonly)
-      .form-group
+      //- .form-group
         label.col-sm-2.control-label(for='host_name') Hostname
         .col-sm-4
           input.form-control(type='text', name='host_name', id='host_name', value='#{user.server.host_name}', readonly)
-      .form-group
+      //- .form-group
         label.col-sm-2.control-label(for='ip_address') IP Address
         .col-sm-4
           input.form-control(type='text', name='ip_address', id='ip_address', value='#{user.server.ip_address}', readonly)
@@ -57,7 +66,7 @@ block content
         label.col-sm-2.control-label(for='image') Image
         .col-sm-4
           input.form-control(type='text', name='image', id='image', value='#{user.server.image}', readonly)
-      .form-group
+      //- .form-group
         label.col-sm-2.control-label(for='snapshots') Snapshots
         .col-sm-4
           input.form-control(type='text', name='snapshots', id='snapshots', value='#{JSON.stringify(user.server.snapshots)}', readonly)
@@ -166,10 +175,10 @@ block content
 
     if !droplet && user.server.image
       .page-header
-        h3 Restore Your Server Image
+        h3 Restore Your Server Image - #{user.server.image}
       form(action='/server/restore', method='POST')
         input(type='hidden', name='_csrf', value=token)
-        input(type='hidden', name='name', value='#{user.profile.name}')
+        input(type='hidden', name='name', value='#{user.profile.domain}')
         input(type='hidden', name='image', value='#{user.server.image}')
         button.btn.btn-primary(type='submit')
           i.fa.fa-cog-o
@@ -177,11 +186,13 @@ block content
       .page-header
         h3 New Server Instead, Option Under Construction
 
+
+
       //- .page-header
         h3 Start A Brand New Image on a Brand New Server
       //- form(action='/server/restore', method='POST')
         input(type='hidden', name='_csrf', value=token)
-        input(type='hidden', name='name', value='#{user.profile.name}')
+        input(type='hidden', name='name', value='#{user.profile.domain}')
         button.btn.btn-primary(type='submit')
           i.fa.fa-cog-o
           |  Start New Server

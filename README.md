@@ -1,3 +1,9 @@
+## @ TODO
+
+- Script Location ENV Vars
+- Passing Event Back to Server Page
+- FrontEnd JS to Auto Update The Lock Page 
+
 ## ENV Vars
 
 ```bash

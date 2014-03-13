@@ -148,10 +148,13 @@ exports.getAccount = function(req, res) {
  * Update profile information.
  */
 
-exports.postUpdateProfile = function(req, res, next) {
-  User.findById(req.user.id, function(err, user) {
+exports.postUpdateProfile = function( req, res, next ) {
+  User.findById(req.user.id, function( err, user ) {
     if (err) return next(err);
-    user.email = req.body.email || '';
+    if ( req.body.domain !== '' ) {
+      req.flash('Domain Slug Set - Now Create A Server');
+    }
+    // user.email = req.body.email || '';
     user.profile.name = req.body.name || '';
     // user.profile.player = req.body.player || '';
     user.profile.domain = req.body.domain || '';

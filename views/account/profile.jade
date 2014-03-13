@@ -4,6 +4,8 @@ block content
   .page-header
     h3 Profile Information
 
+    p=JSON.stringify(user, null, 2)
+
   if user.profile.domain === ''
     form.form-horizontal(action='/account/profile', method='POST')
       input(type='hidden', name='_csrf', value=token)
@@ -18,7 +20,12 @@ block content
       .form-group
         label.col-sm-2.control-label(for='domain') Sub Domain
         .col-sm-4
-            input.form-control(type='text', name='domain', id='domain', value='#{user.profile.domain}')
+          input.form-control(type='text', name='domain', id='domain', value='#{user.profile.domain}')
+      .form-group
+        label.col-sm-2.control-label(for='image') Image
+        .col-sm-4
+          input.form-control(type='text', name='image', id='image', value='#{user.server.image}', readonly)
+      //- if user.server.image !== ''
       .form-group
         .col-sm-offset-2.col-sm-4
           button.btn.btn.btn-primary(type='submit')
@@ -38,6 +45,10 @@ block content
         label.col-sm-2.control-label(for='domain') Sub Domain
         .col-sm-4
           input.form-control(type='text', name='domain', id='domain', value='#{user.profile.domain}', readonly)
+      .form-group
+        label.col-sm-2.control-label(for='image') Image
+        .col-sm-4
+          input.form-control(type='text', name='image', id='image', value='#{user.server.image}', readonly)
     if user.server.id === ''
       form.form-horizontal(action='/server/restore', method='POST')
         input(type='hidden', name='_csrf', value=token)

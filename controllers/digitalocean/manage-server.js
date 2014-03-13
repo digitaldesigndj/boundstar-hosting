@@ -48,11 +48,13 @@ exports.dropletPowerOn = function(req, res) {
 exports.dropletSnapshot = function(req, res) {
   User.findById(req.user.id, function (err, user) {
     if (err) return next(err);
-    api.dropletSnapshot( user.server.id, { name: user.profile.name }, function (err, event_id) {
+
+    user.profile.bil
+
+    api.dropletSnapshot( user.server.id, { name: user.profile.domain }, function (err, event_id) {
       if (err) return err;
       api.eventGet(event_id, function ( error, event ) {
         req.flash('success', { msg: JSON.stringify(event) + " - your event is processing, this usually takes about 10 min." });
-        console.log( event );
         res.redirect( '/server' );
         // res.redirect('/hosting/event?id='+event_id);
       });
@@ -84,15 +86,29 @@ exports.dropletSnapshot = function(req, res) {
 exports.dropletDestroy = function(req, res) {
   User.findById(req.user.id, function (err, user) {
     if (err) return next(err);
-    api.dropletDestroy( user.server.id, function (err, event) {
+    api.dropletGet( user.server.id, function (err, droplet) {
       if (err) return err;
-      user.server.id = '';
-      user.save(function (err) {
-        if (err) return next(err);
-        req.flash('warning', { msg: "SERVER DESTROYED" });
-        res.redirect('/server');
+      // Save a billing entry here
+      var created_time = droplet.created_at;
+      var current_time = new Date().getTime()/1000;
+      var server_lifetime =  current_time - created_at;
+      console.log( created_time, current_time, server_lifetime );
+
+
+
+      api.dropletDestroy( user.server.id, function (err, event) {
+        if (err) return err;
+        user.server.id = '';
+        user.profile.billed_seconds += server_lifetime;
+        user.save(function (err) {
+          if (err) return next(err);
+          req.flash('warning', { msg: "SERVER DESTROYED" });
+          res.redirect('/server');
+        });
       });
     });
+
+
   });
 };
 
