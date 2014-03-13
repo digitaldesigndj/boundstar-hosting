@@ -17,6 +17,7 @@ block content
           li locked - #{droplet.locked}
           li status - #{droplet.status}
           li created_at - #{droplet.created_at}
+          li #{JSON.stringify(droplet.snapshots)}
   else
     h2 sorry, no server!
 
