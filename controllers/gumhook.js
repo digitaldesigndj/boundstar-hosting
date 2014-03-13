@@ -39,7 +39,7 @@ exports.purchase = function( req, res ) {
             purchase.save(function(err) {
               if (err) { return err; }
               console.log( 'purchase claimed' );
-              req.flash('default', { msg: 'Redeemed tokens to account' + purchase.email + '. Thanks!'});
+              req.flash('success', { msg: 'Redeemed tokens to account' + purchase.email + '. Thanks!'});
               res.redirect('/server');
             });
           });
@@ -59,8 +59,13 @@ exports.gumroadPurchaseCallback = function( req, res ) {
   }
   if ( req.body.seller_id === secrets.gumroad.seller_id ) {
     // && req.body.test != 'true' ) { ??
-
     var hash = crypto.createHash('md5').update(JSON.stringify(req.body)+Math.random()).digest("hex");
+    var mailOptions = {
+      to: req.body.email,
+      from: 'tdy721@gmail.com',
+      subject: 'Thanks for your purchase',
+      text: 'http://my.boundstar.com/purchase/' + hash
+    };
     // This is a purchase 
     var purchase = new Purchase({
       url_hash: hash,
@@ -81,19 +86,14 @@ exports.gumroadPurchaseCallback = function( req, res ) {
       if (err) return next(err);
       if( user != null ) {
         console.log(user);
-        user.server.tokens = user.server.tokens + 10;
+        user.server.tokens = parseFloat(Math.round(10*user.server.tokens)/10)+10;
         purchase.claimed = true;
         purchase.save(function(err) {
           if (err) { return err; }
             console.log( 'purchase saved' );
             user.save(function(err) {
               console.log( 'user saved');
-              var mailOptions = {
-                to: req.body.email,
-                from: 'tdy721@gmail.com',
-                subject: 'Thanks for your purchase',
-                text: 'You bought server tokens! They have been added to your account: http://my.boundstar.com/purchase/' + hash
-              };
+              // 'You bought server tokens! They have been added to your account:'
               smtpTransport.sendMail(mailOptions, function(err) {
                 if (err) {
                   req.flash('errors', { msg: err.message });
@@ -105,7 +105,7 @@ exports.gumroadPurchaseCallback = function( req, res ) {
             });
         });
       }else{
-        // EMailed Waiting
+        // EMailed Waiting to be claimed
         purchase.save(function(err) {
           if (err) { return err; }
             console.log( 'purchase saved' );
