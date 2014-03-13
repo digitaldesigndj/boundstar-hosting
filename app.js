@@ -128,6 +128,7 @@ app.use(express.errorHandler());
 
 app.post('/gumroad', gumhookController.gumroadPurchaseCallback);
 app.post('/secret', gumhookController.gumroadWebhook);
+app.get('/purchase/:hash', passportConf.isAdmin, gumhookController.purchase);
 
 
 // Starbound Stuff
