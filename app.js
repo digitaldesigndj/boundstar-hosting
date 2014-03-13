@@ -93,20 +93,20 @@ app.use(express.session({
 }));
 // app.use(express.csrf());
 
-app.use(function (req, res, next) {
-  var whitelist = [
-    '/secret'
-  ];
-  if (req.method !== 'POST') {
-    next();
-    return;
-  }
-  if (whitelist.indexOf(req.url) !== -1) {
-    next();
-  } else {
-    express.csrf()(req, res, next);
-  }
-});
+// app.use(function (req, res, next) {
+//   var whitelist = [
+//     '/secret'
+//   ];
+//   if (req.method !== 'POST') {
+//     next();
+//     return;
+//   }
+//   if (whitelist.indexOf(req.url) !== -1) {
+//     next();
+//   } else {
+//     express.csrf()(req, res, next);
+//   }
+// });
 
 app.use(passport.initialize());
 app.use(passport.session());

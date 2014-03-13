@@ -16,8 +16,9 @@ exports.getMakeServer = function (req, res) {
 };
 
 exports.postMakeServer = function (req, res) {
-  console.log( "Creating Server")
+  console.log( "Creating Server");
   // size_id 66 = 512MB, 62 = 2GB
+  console.log( req.body );
   // res.send( req.body );
   var image = '2629230';
   // Create Droplet
@@ -28,11 +29,11 @@ exports.postMakeServer = function (req, res) {
     if( user.server.image !== '' ) { image = user.server.image; }
     api.dropletNew( user.profile.domain + '.boundstar.com', 62, image, 4, {'ssh_key_ids': '87061,69732,93888'}, function ( err, response ){
       if( err ) { res.send( err ); }
-      console.log( response );
+      // console.log( response );
       api.eventGet(response.event_id, function ( error, event ) {
         if( err ) { res.send( err ); }
-        console.log( event );
-        console.log( event.droplet_id );
+        // console.log( event );
+        // console.log( event.droplet_id );
         api.dropletGet( event.droplet_id, function (err, droplet) {
           if( err ) { res.send( err ); }
           console.log( droplet );
@@ -40,7 +41,7 @@ exports.postMakeServer = function (req, res) {
           // user.server.token = req.body.token || '';
           // Subtract a token for spinning up the server
           user.server.tokens = user.server.tokens - 1;
-          user.server.image = req.body.image || '';
+          user.server.image = req.body.image || '2629230';
           user.server.size = droplet.size_id || '';
           user.server.host_name = droplet.name || '';
           user.server.ip_address = droplet.ip_address || '';

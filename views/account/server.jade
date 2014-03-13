@@ -2,8 +2,8 @@ extends ../layout
 
 block content
 
-  ul
-    if droplet && droplet.status !== 'archive'
+  if droplet && droplet.status !== 'archive'
+    ul
       li= droplet.name
         ul
           li id - #{droplet.id}
@@ -17,26 +17,29 @@ block content
           li locked - #{droplet.locked}
           li status - #{droplet.status}
           li created_at - #{droplet.created_at}
-    else
-      li sorry, no server!
+  else
+    h2 sorry, no server!
+
   if stats
-    h3.page-header Balance
+    h2.page-header Balance
     p 
-    if stats.tokens
-      .form-group
-        label.col-sm-2.control-label(for='balance') Token Balance
-        .col-sm-4
-          input.form-control(type='balance', name='balance', id='balance', value='#{stats.tokens}', readonly)
-    if stats.life
-      .form-group
-        label.col-sm-2.control-label(for='life') Server Lifetime
-        .col-sm-4
-          input.form-control(type='life', name='life', id='life', value='#{stats.life}', readonly)
-    if stats.spent
-      .form-group
-        label.col-sm-2.control-label(for='spent') Tokens Spent
-        .col-sm-4
-          input.form-control(type='spent', name='spent', id='spent', value='#{stats.spent}', readonly)      
+      form.form-horizontal
+        input(type='hidden', name='_csrf', value=token)
+        if stats.tokens
+          .form-group
+            label.col-sm-2.control-label(for='balance') Token Balance
+            .col-sm-4
+              input.form-control(type='balance', name='balance', id='balance', value='#{stats.tokens}', readonly)
+        if stats.life
+          .form-group
+            label.col-sm-2.control-label(for='life') Server Lifetime
+            .col-sm-4
+              input.form-control(type='life', name='life', id='life', value='#{stats.life}', readonly)
+        if stats.spent
+          .form-group
+            label.col-sm-2.control-label(for='spent') Tokens Spent
+            .col-sm-4
+              input.form-control(type='spent', name='spent', id='spent', value='#{stats.spent}', readonly)      
 
     //- .form-group
       ul
@@ -44,10 +47,8 @@ block content
         li current server tokens spent: #{stats.spent}
         li current_tokens_estimate: #{stats.tokens}
 
-  
-    h3.page-header Manage Server Information
-    p Superpowers for now.
-
+    h2.page-header Manage Server Information
+    p 
       form.form-horizontal(action='/server', method='POST')
         input(type='hidden', name='_csrf', value=token)
         .form-group
@@ -108,11 +109,11 @@ block content
   else
 
     if droplet && droplet.status == 'active'
-      h2 Server Active - #{droplet.ip_address}
-      p Created At $$$$$$$
+      h2.page-header Server Active - #{droplet.ip_address}
+      p Created At #{droplet.created_at}
       p 2GB, 2x2GHz Intel @ $0.10/hour
 
-      h4.page-header Password
+      h2.page-header Password
       p Set your password, leave blank to make public, this will restart StarBound.
         form.form-horizontal(action='/server/runscript', method='POST')
           input(type='hidden', name='_csrf', value=token)
@@ -129,7 +130,7 @@ block content
                 | Set Password
 
       if droplet
-        h4.page-header Server Image (Your Backup Slot)
+        h2.page-header Server Image (Your Backup Slot)
       if user.server.image
         p Your Image Number Is: #{user.server.image}
         p Image Created At: $$$$$$$
@@ -139,7 +140,7 @@ block content
           a(href='/server/poweroff')
             button.btn.btn-primary Shut Down Server
 
-      h4.page-header Troubleshoot
+      h2.page-header Troubleshoot
       p Restart StarBound first, then try doing the Hardware Reboot.
       p Step 1
       p
@@ -158,7 +159,8 @@ block content
 
 
     if droplet && droplet.status == 'off'
-      h2 Server Inactive...
+      h2.page-header Server Inactive...
+      p
 
     if !droplet
       h2.page-header Welcome Back! To get started, create a server.
@@ -174,7 +176,7 @@ block content
       p
         a(href='/server/poweron')
           button.btn.btn-primary Power On Server
-      h4 
+      h2 
       p
         form(action='/server/snapshot', method='POST')
           input(type='hidden', name='_csrf', value=token)
@@ -196,7 +198,7 @@ block content
 
     if !droplet && user.server.image
       .page-header
-        h3 Restore Your Server Image - #{user.server.image}
+        h2 Restore Your Server Image - #{user.server.image}
       form(action='/server/restore', method='POST')
         input(type='hidden', name='_csrf', value=token)
         input(type='hidden', name='name', value='#{user.profile.domain}')
@@ -205,12 +207,12 @@ block content
           i.fa.fa-cog-o
           |  Restore Server
       .page-header
-        h3 New Server Instead, Option Under Construction
+        h2 New Server Instead, Option Under Construction
 
 
 
       //- .page-header
-        h3 Start A Brand New Image on a Brand New Server
+        h2 Start A Brand New Image on a Brand New Server
       //- form(action='/server/restore', method='POST')
         input(type='hidden', name='_csrf', value=token)
         input(type='hidden', name='name', value='#{user.profile.domain}')
@@ -238,7 +240,7 @@ block content
 
     //- if secrets.localAuth
     //-   .page-header
-    //-     h3 Change DNS!
+    //-     h2 Change DNS!
 
     //-   form.form-horizontal(action='/account/password', method='POST')
     //-     input(type='hidden', name='_csrf', value=token)

@@ -3,6 +3,7 @@ var fs = require('fs')
 var exec = require('child_process').exec;
 var starboundConfig = require('../config/starbound');
 var User = require('../models/User');
+var secrets = require('../config/secrets');
 
 
 /**
@@ -64,12 +65,5 @@ exports.postScript = function (req, res) {
         });
       });
     });
-  }
-
-
-  if( req.body.password != '' ) {
-    
-  }else{
-
   }
 };

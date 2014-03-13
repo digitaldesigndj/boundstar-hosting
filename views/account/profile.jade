@@ -50,14 +50,16 @@ block content
         .col-sm-4
           input.form-control(type='text', name='image', id='image', value='#{user.server.image}', readonly)
     if user.server.id === ''
+      h1 We're All Set, Push The Button!
       form.form-horizontal(action='/server/restore', method='POST')
         input(type='hidden', name='_csrf', value=token)
         input(type='hidden', name='domain', value='#{user.profile.domain}')
+        input(type='hidden', name='image', value='2629230')
         .form-group
           .col-sm-offset-2.col-sm-4
             button.btn.btn.btn-primary(type='submit')
               i.fa.fa-cogs
-              | Create A Server
+              | Create A Server (1 Token)
     else
       form.form-horizontal
         .form-group
