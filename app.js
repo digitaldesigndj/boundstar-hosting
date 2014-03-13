@@ -26,7 +26,7 @@ var resetController = require('./controllers/reset');
 
 var claimController  = require('./controllers/claim');
 var adminController  = require('./controllers/admin');
-var gumhook = require('./controllers/gumhook');
+var gumhookController = require('./controllers/gumhook');
 
 var scriptController  = require('./controllers/script');
 // var digitalOceanController  = require('./controllers/digitalocean/digitalocean');
@@ -91,12 +91,29 @@ app.use(express.session({
     auto_reconnect: true
   })
 }));
-app.use(express.csrf());
+// app.use(express.csrf());
+
+app.use(function (req, res, next) {
+  //compute needCSRF here as appropriate based on req.path or whatever
+    var whitelist = [
+    '/secret'
+  ];
+  if (req.method !== 'POST') {
+    next();
+    return;
+  }
+  if (whitelist.indexOf(req.url) !== -1) {
+    next();
+  } else {
+    express.csrf()(req, res, next);
+  }
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(function(req, res, next) {
   res.locals.user = req.user;
-  res.locals.token = req.csrfToken();
+//  res.locals.token = req.csrfToken();
   res.locals.secrets = secrets;
   next();
 });
@@ -110,8 +127,8 @@ app.use(function(req, res) {
 app.use(express.errorHandler());
 
 
-app.post('/secret', gumhook.gumroadWebhook);
-app.get('/webhook-success', gumhook.createAccount);
+app.post('/secret', gumhookController.gumroadWebhook);
+app.get('/webhook-success', gumhookController.createAccount);
 
 
 // Starbound Stuff

@@ -1,4 +1,4 @@
-var User = require('../models/User');
+// var User = require('../models/User');
 
 exports.gumroadWebhook = function( req, res ) {
   console.log( req.body );  
