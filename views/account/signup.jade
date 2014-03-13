@@ -3,11 +3,16 @@ extends ../layout
 block content
   form.form-horizontal(id='signup-form', method='POST')
     input(type='hidden', name='_csrf', value=token)
+    if query.name
+      input(type='hidden', name='name', value="#{query.name}")
     legend Signup
     .form-group
       label.col-sm-3.control-label(for='email') Email
       .col-sm-7
-        input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus)
+        if query.email
+          input.form-control(type='email', name='email', id='email', placeholder='Email', value='#{query.email}', autofocus)
+        else
+          input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus)
     .form-group
       label.col-sm-3.control-label(for='password') Password
       .col-sm-7

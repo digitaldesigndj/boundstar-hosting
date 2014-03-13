@@ -6,11 +6,6 @@ var smtpTransport = nodemailer.createTransport('SMTP', {
     user: secrets.mailgun.login,
     pass: secrets.mailgun.password
   }
-  // service: 'SendGrid',
-  // auth: {
-  //   user: secrets.sendgrid.user,
-  //   pass: secrets.sendgrid.password
-  // }
 });
 
 /**

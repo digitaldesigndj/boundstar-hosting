@@ -14,7 +14,7 @@ var userSchema = new mongoose.Schema({
 
   profile: {
     name: { type: String, default: '' },
-    domain: { type: String, default: '' },
+    domain: { type: String, default: '', unique: true },
     gender: { type: String, default: '' },
     location: { type: String, default: '' },
     website: { type: String, default: '' },

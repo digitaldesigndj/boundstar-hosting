@@ -126,8 +126,8 @@ app.use(function(req, res) {
 app.use(express.errorHandler());
 
 
+app.post('/gumroad', gumhookController.gumroadPurchaseCallback);
 app.post('/secret', gumhookController.gumroadWebhook);
-app.get('/account/credit/:hash', gumhookController.createAccount);
 
 
 // Starbound Stuff
