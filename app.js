@@ -157,7 +157,7 @@ app.post( '/server/restore', passportConf.isAdmin, doMakeServer.postMakeServer )
 
 // app.post( '/hosting/make/event', passportConf.isAdmin, digitalOceanController.postEvent );
 
-app.get('/server', passportConf.isAuthenticated, serverController.getServer);
+app.get('/server', passportConf.isNotBroke, passportConf.isAuthenticated, serverController.getServer);
 // app.post('/server', passportConf.isAuthenticated, serverController.postUpdateServer);
 
 
