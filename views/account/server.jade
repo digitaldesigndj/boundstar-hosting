@@ -21,26 +21,26 @@ block content
   //- else
     h2 sorry, no server!
 
-  if stats.tokens
+  //- if stats
     h2.page-header Balance
     p 
       form.form-horizontal
         input(type='hidden', name='_csrf', value=token)
-        if stats.tokens
-          .form-group
-            label.col-sm-2.control-label(for='balance') Token Balance
-            .col-sm-4
-              input.form-control(type='balance', name='balance', id='balance', value='#{stats.tokens}', readonly)
-        if stats.life
-          .form-group
-            label.col-sm-2.control-label(for='life') Server Lifetime
-            .col-sm-4
-              input.form-control(type='life', name='life', id='life', value='#{stats.life}', readonly)
-        if stats.spent
-          .form-group
-            label.col-sm-2.control-label(for='spent') Tokens Spent
-            .col-sm-4
-              input.form-control(type='spent', name='spent', id='spent', value='#{stats.spent}', readonly)      
+        //- if stats.tokens
+        .form-group
+          label.col-sm-2.control-label(for='balance') Token Balance
+          .col-sm-4
+            input.form-control(type='balance', name='balance', id='balance', value='#{stats.tokens}', readonly)
+        //- if stats.life
+        //- .form-group
+          label.col-sm-2.control-label(for='life') Server Lifetime
+          .col-sm-4
+            input.form-control(type='life', name='life', id='life', value='#{stats.life}', readonly)
+        //- if stats.spent
+        //- .form-group
+          label.col-sm-2.control-label(for='spent') Tokens Spent
+          .col-sm-4
+            input.form-control(type='spent', name='spent', id='spent', value='#{stats.spent}', readonly)      
 
   if !droplet
     h2.page-header To Get Started Create a Server.
@@ -118,19 +118,34 @@ block content
     h2 The Server is locked because an event is processing. Please be patient.
     p shutdowns take about 10 seconds
     p reboots take about 30 seconds
-    p taking a server image takes 2-10 min
-    p starting a new server takes 2-5 min
+    //- p taking a server image takes 2-10 min
+    p starting a new server takes 1-2 min
+    p this page checks every 5 seconds for you
     style body{ background: url(/img/crazy_loop.gif); } .middle.container { background: rgba(255,255,255,0.7); }
+    script.
+      window.setInterval(function(){
+        location.reload();
+      }, 5000);
     //- img(src='https://i.imgur.com/RRfpIuS.gif')
   else
 
     if droplet && droplet.status == 'active'
       h2.page-header Server Active - #{droplet.ip_address}
       p Created At #{droplet.created_at}
-      p 2GB, 2x2GHz Intel @ $0.10/hour
+      p 2GB, 2x2GHz Intel @ 1 Token/hr
+      p 
+        strong #{stats.tokens} Tokens Remaining
+      br
+
+      if droplet && droplet.status == 'active'
+        p
+          a(href='/server/poweroff')
+            button.btn.btn-info 
+              i.fa.fa-caret-square-o-down 
+              | Shut Down Server
 
       h2.page-header Password
-      p Set your password, leave blank to make public, this will restart StarBound.
+      p Set your server password, leave blank to make public, this will restart StarBound.
         form.form-horizontal(action='/server/runscript', method='POST')
           input(type='hidden', name='_csrf', value=token)
           input(type='hidden', name='script', value='password')
@@ -141,22 +156,17 @@ block content
               input.form-control(name='password', value='#{user.server.password}')
           .form-group
             .col-sm-offset-2.col-sm-4
-              button.btn.btn-primary(type='submit')
+              button.btn.btn-success(type='submit')
                 i.fa.fa-cogs
                 | Set Password
 
-      if droplet
-        h2.page-header Server Image (Your Backup Slot)
-      if user.server.image
-        p Your Image Number Is: #{user.server.image}
-      if image
-        p=JSON.stringify(image)
-
-      if droplet && droplet.status == 'active'
-        p You need to shutdown the server before you can take a new image.
-        p
-          a(href='/server/poweroff')
-            button.btn.btn-primary Shut Down Server
+      //- if droplet
+      //-   h2.page-header Server Image (Your Backup Slot)
+      //- if user.server.image
+      //-   p Your Image Number Is: #{user.server.image}
+      //- if image
+      //-   p=JSON.stringify(image)
+      //-   p You need to shutdown the server before you can take a new image.
 
       h2.page-header Troubleshoot
       p Restart StarBound first, then try doing the Hardware Reboot.
@@ -166,19 +176,24 @@ block content
           input(type='hidden', name='_csrf', value=token)
           input(type='hidden', name='script', value='restart')
           input(type='hidden', name='ip_address', value='#{droplet.ip_address}')
-          button.btn.btn-primary(type='submit')
-            i.fa.fa-cogs
+          button.btn.btn-info(type='submit')
+            i.fa.fa-repeat
             | Restart Starbound Process
       if droplet && droplet.status == 'active'
         p Step 2
         p
           a(href='/server/powercycle')
-            button.btn.btn-primary Hardware Reboot
+            button.btn.btn-warning
+              i.fa.fa-undo
+              |  Hardware Reboot
 
 
     if droplet && droplet.status == 'off'
       h2.page-header Server Inactive...
-      p
+      p 
+        strong #{stats.tokens} Tokens Remaining
+      p Still consuming tokens! - Destroy the server to stop using tokens.
+      p In the near future there will be options here to save your server here before destroying it.
 
     if droplet && droplet.status == 'off'
       p
@@ -187,7 +202,7 @@ block content
             i.fa.fa-lightbulb-o
             | Power On Server
       h2 
-      p
+      //- p
         form(action='/server/snapshot', method='POST')
           input(type='hidden', name='_csrf', value=token)
           //- input(type='hidden', name='name', value='#{user.profile.name}')
@@ -195,6 +210,18 @@ block content
           button.btn.btn-info(type='submit')
             i.fa.fa-save
             | Take A New Image
+      //- if user.server.image != '2629230'
+        .page-header
+          h2 You have a saved server image (beta)
+              .page-header
+          h2 Restore Your Server Image - #{user.server.image}
+        form(action='/server/boot', method='POST')
+          input(type='hidden', name='_csrf', value=token)
+          input(type='hidden', name='name', value='#{user.profile.domain}')
+          input(type='hidden', name='image', value='#{user.server.image}')
+          button.btn.btn-primary(type='submit')
+            i.fa.fa-cogs
+            |  Restore Server
 
     //- if !droplet && user.server.image
     if user.server.image === '' && user.server.id !== '' && droplet.status == 'off'    
@@ -210,22 +237,6 @@ block content
             | Destroy Server
 
     //- if !droplet && user.server.image
-
-
-    if user.server.image != '2629230'
-      .page-header
-        h2 You have a saved server image (beta)
-            .page-header
-        h2 Restore Your Server Image - #{user.server.image}
-      form(action='/server/boot', method='POST')
-        input(type='hidden', name='_csrf', value=token)
-        input(type='hidden', name='name', value='#{user.profile.domain}')
-        input(type='hidden', name='image', value='#{user.server.image}')
-        button.btn.btn-primary(type='submit')
-          i.fa.fa-cogs
-          |  Restore Server
-
-
 
 
       //- .page-header

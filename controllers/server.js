@@ -15,29 +15,44 @@ exports.getServer = function(req, res) {
     var used_tokens = user.server.billed_seconds/3600;
     stats.life = 0;
     stats.spent = 0;
-
-    stats.tokens = stats.spent + ( - used_tokens ) + parseInt(user.server.tokens);
+    var current_use = Math.round(100*( +user.server.tokens - used_tokens ))/100;
+    stats.tokens = current_use;
     if ( user.server.id != '' ) {
       // User has a server
       api.dropletGet( user.server.id , function (err, droplet) {
         if (err) return err;
-        var stats = {};
         var current_time = new Date().getTime()/1000;
         var created_time = new Date(droplet.created_at).getTime()/1000;
-        // var image_time = 
-        stats.life = Math.round( current_time - created_time ) + ' seconds';
-        stats.spent = ( stats.life/3600 ) + 1;
-        stats.tokens = stats.spent + used_tokens;
-        if( droplet.snapshots.length ) {
-          user.server.image = _.last( droplet.snapshots ).id;
-          api.imageGet( user.server.image, function ( err, image ) {
-            res.render('account/server', {
-              title: 'Server Management',
-              droplet: droplet,
-              stats: stats,
-              image: image
+        stats.life = Math.round(current_time - created_time);
+        stats.spent = ( Math.round(100*( stats.life/3600 ) )/100 );
+        stats.tokens = Math.round(100*(current_use - stats.spent))/100;
+        console.log( stats.life, used_tokens, stats.tokens );
+        if( droplet.snapshots.length != 0 ) {
+          console.log( droplet.snapshots.length );
+          last_image = _.last( droplet.snapshots ).id;
+          if( user.server.image != last_image ){
+            droplet.snapshots.length != 
+            user.save(function (err) {
+              api.imageGet( user.server.image, function ( err, image ) {
+                res.render('account/server', {
+                  title: 'Server Management',
+                  droplet: droplet,
+                  stats: stats,
+                  image: image
+                });
+              });
             });
-          });
+          }
+          else{
+            api.imageGet( user.server.image, function ( err, image ) {
+              res.render('account/server', {
+                title: 'Server Management',
+                droplet: droplet,
+                stats: stats,
+                image: image
+              });
+            });
+          }
         }
         else{
           res.render('account/server', {
