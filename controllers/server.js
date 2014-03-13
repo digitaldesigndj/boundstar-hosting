@@ -27,9 +27,9 @@ exports.getServer = function(req, res) {
         stats.life = current_time - created_time;
         stats.spent = ( stats.life/3600 ) + 1;
         stats.tokens = stats.spent + used_tokens;
-        if( droplet.snapshots !== [] ) {
-          user.server.image = _.last( droplet.snapshots ).id;
-        }
+        // if( droplet.snapshots !== [] ) {
+        //   user.server.image = _.last( droplet.snapshots ).id;
+        // }
         console.log( droplet.snapshots );
         // user.server.image = 2629230;
         user.server.tokens = -1;
