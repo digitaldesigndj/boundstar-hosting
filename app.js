@@ -94,13 +94,11 @@ app.use(express.session({
 // app.use(express.csrf());
 
 app.use(function (req, res, next) {
-  //compute needCSRF here as appropriate based on req.path or whatever
-    var whitelist = [
+  var whitelist = [
     '/secret'
   ];
   if (req.method !== 'POST') {
     next();
-    return;
   }
   if (whitelist.indexOf(req.url) !== -1) {
     next();
@@ -113,7 +111,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(function(req, res, next) {
   res.locals.user = req.user;
-//  res.locals.token = req.csrfToken();
+  // res.locals.token = req.csrfToken();
   res.locals.secrets = secrets;
   next();
 });
@@ -128,7 +126,7 @@ app.use(express.errorHandler());
 
 
 app.post('/secret', gumhookController.gumroadWebhook);
-app.get('/webhook-success', gumhookController.createAccount);
+app.get('/account/credit/', gumhookController.createAccount);
 
 
 // Starbound Stuff
