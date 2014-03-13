@@ -151,18 +151,49 @@ exports.getAccount = function(req, res) {
  */
 
 exports.postUpdateProfile = function( req, res, next ) {
+  req.assert('domain', 'Domain must be at least 6 characters long').len(6,20);
+  req.assert('domain', 'Domain must be at use letters only').isAlpha();
+
+  var errors = req.validationErrors();
+
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('/account');
+  }
+
   User.findById(req.user.id, function( err, user ) {
     if (err) return next(err);
-    if ( req.body.domain !== '' ) {
-      req.flash('Domain Slug Set - Now Create A Server');
-    }
+
     // user.email = req.body.email || '';
     user.profile.name = req.body.name || '';
     // user.profile.player = req.body.player || '';
-    user.profile.domain = req.body.domain || '';
+    user.profile.domain = req.body.domain.toLowerCase() || '';
     // user.profile.gender = req.body.gender || '';
     // user.profile.location = req.body.location || '';
     // user.profile.website = req.body.website || '';
+
+
+  user.save(function(err) {
+    if (err) {
+      if (err.code === 11000) {
+        req.flash('errors', { msg: 'That domain already exists.' });
+      }
+      return res.redirect('/account');
+    }
+    req.logIn(user, function(err) {
+      if (err) return next(err);
+      res.redirect('/account');
+    });
+  });
+
+
+
+
+
+
+
+
+
 
     user.save(function(err) {
       if (err) return next(err);
