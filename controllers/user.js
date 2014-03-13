@@ -167,20 +167,18 @@ exports.postUpdateProfile = function( req, res, next ) {
     // user.profile.gender = req.body.gender || '';
     // user.profile.location = req.body.location || '';
     // user.profile.website = req.body.website || '';
-    if(){
-      user.save(function(err) {
-        if (err) {
-          if (err.code === 11000) {
-            req.flash('errors', { msg: 'That domain already exists.' });
-          }
-          return res.redirect('/account');
+    user.save(function(err) {
+      if (err) {
+        if (err.code === 11000) {
+          req.flash('errors', { msg: 'That domain already exists.' });
         }
-        req.logIn(user, function(err) {
-          if (err) return next(err);
-          res.redirect('/account');
-        });
+        return res.redirect('/account');
+      }
+      req.logIn(user, function(err) {
+        if (err) return next(err);
+        res.redirect('/account');
       });
-    }
+    });
   });
 };
 
