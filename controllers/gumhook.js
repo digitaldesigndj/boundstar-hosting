@@ -25,4 +25,4 @@ exports.gumroadWebhook = function( req, res ) {
 exports.createAccount = function( req, res, next ) {
   var provider = req.params.provider;
   return res.send( "Hello Person: " + provider );
-});
+};
