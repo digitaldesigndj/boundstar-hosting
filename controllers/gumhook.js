@@ -64,7 +64,7 @@ exports.gumroadPurchaseCallback = function( req, res ) {
       to: req.body.email,
       from: 'tdy721@gmail.com',
       subject: 'Thanks for your purchase',
-      text: 'http://my.boundstar.com/purchase/' + hash
+      text: 'http://my.starbound.today/purchase/' + hash
     };
     // This is a purchase 
     var purchase = new Purchase({
@@ -114,7 +114,7 @@ exports.gumroadPurchaseCallback = function( req, res ) {
               to: req.body.email,
               from: 'tdy721@gmail.com',
               subject: 'Thanks for your purchase',
-              text: 'You bought server tokens! Register, then claim them with this url: http://my.boundstar.com/purchase/' + hash
+              text: 'You bought server tokens! Register, then claim them with this url: http://my.starbound.today/purchase/' + hash
             };
             smtpTransport.sendMail(mailOptions, function(err) {
               if (err) {

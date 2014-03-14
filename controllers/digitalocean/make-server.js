@@ -24,7 +24,7 @@ exports.postMakeServer = function (req, res) {
   // Create Droplet
   // Cant start new server!
   if( req.user.server.image !== '' ) { image = req.user.server.image; }
-  api.dropletNew( req.user.profile.domain + '.boundstar.com', 62, image, 4, {'ssh_key_ids': '87061,69732,93888'}, function ( err, response ){
+  api.dropletNew( req.user.profile.domain + '.starbound.today', 62, image, 4, {'ssh_key_ids': '87061,69732,93888'}, function ( err, response ){
     if( err ) { res.send( err ); }
     console.log( response );
     api.eventGet(response.event_id, function ( error, event ) {
@@ -67,7 +67,7 @@ exports.postMakeServer = function (req, res) {
     // Get Droplet Info
     // api.dropletGetAll( function ( error, data ) {
     //   if( err ) { res.send( err ); }
-    //   var new_server = _.findWhere( data, { name: req.body.name + '.boundstar.com' });
+    //   var new_server = _.findWhere( data, { name: req.body.name + '.starbound.today' });
     //   console.log( new_server );
   });
 };

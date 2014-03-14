@@ -15,8 +15,8 @@ exports.getEvent = function (req, res) {
     req.flash('success', { msg: JSON.stringify( event ) });
     // if( parseInt( event['percentage'] ) === 100 ) {
     //   req.flash('success', { msg: "SERVER CREATED, DNS is UPDATING" });
-    //   req.flash('success', { msg: "DNS is updating: https://www.whatsmydns.net/#A/node.boundstar.com" });
-    //   // https://www.whatsmydns.net/#A/node.boundstar.com
+    //   req.flash('success', { msg: "DNS is updating: https://www.whatsmydns.net/#A/node.starbound.today" });
+    //   // https://www.whatsmydns.net/#A/node.starbound.today
     //   res.redirect('hosting/servers');
     // }
     // else{
