@@ -10,16 +10,16 @@ exports.getServer = function(req, res) {
   User.findById(req.user.id, function (err, user) {
     if (err) return next(err);
     var stats = {};
-    console.log( user.server.tokens );
+    console.log( user..tokens );
 
-    var used_tokens = user.server.billed_seconds/3600;
+    var used_tokens = user..billed_seconds/3600;
     stats.life = 0;
     stats.spent = 0;
-    var current_use = Math.round(100*( +user.server.tokens - used_tokens ))/100;
+    var current_use = Math.round(100*( +user..tokens - used_tokens ))/100;
     stats.tokens = current_use;
-    if ( user.server.id != '' ) {
+    if ( user..id != '' ) {
       // User has a server
-      api.dropletGet( user.server.id , function (err, droplet) {
+      api.dropletGet( user..id , function (err, droplet) {
         if (err) return err;
         var current_time = new Date().getTime()/1000;
         var created_time = new Date(droplet.created_at).getTime()/1000;
@@ -30,10 +30,10 @@ exports.getServer = function(req, res) {
         if( droplet.snapshots.length != 0 ) {
           console.log( droplet.snapshots.length );
           last_image = _.last( droplet.snapshots ).id;
-          if( user.server.image != last_image ){
+          if( user..image != last_image ){
             droplet.snapshots.length != 
             user.save(function (err) {
-              api.imageGet( user.server.image, function ( err, image ) {
+              api.imageGet( user..image, function ( err, image ) {
                 res.render('account/server', {
                   title: 'Server Management',
                   droplet: droplet,
@@ -44,7 +44,7 @@ exports.getServer = function(req, res) {
             });
           }
           else{
-            api.imageGet( user.server.image, function ( err, image ) {
+            api.imageGet( user..image, function ( err, image ) {
               res.render('account/server', {
                 title: 'Server Management',
                 droplet: droplet,
@@ -90,8 +90,8 @@ exports.postUpdateServer = function(req, res, next) {
     if (err) return next(err);
     console.log( req.body );
     api.dropletGet( req.body.id, function (err, droplet) {
-      user.server.id = droplet.id || '';
-      user.server.token = req.body.token || '';
+      user..id = droplet.id || '';
+      user..token = req.body.token || '';
       user.save(function (err) {
         if (err) return next(err);
         // req.flash('success', { msg: 'Profile information updated.' });
@@ -112,20 +112,20 @@ exports.postUpdateServer = function(req, res, next) {
 //     User.findById(req.user.id, function (err, user) {
 //       if (err) return next(err);
 //       // user.email = req.body.email || '';
-//       // user.profile.name = req.body.name || '';
+//       // user.name = req.body.name || '';
 //       // user.profile.player = req.body.player || '';
 //       // user.profile.steam = req.body.steam || '';
 //       // user.profile.gender = req.body.gender || '';
 //       // user.profile.location = req.body.location || '';
 //       // user.profile.website = req.body.website || '';
 
-//       user.server.token = req.body.token || '';
-//       user.server.size = req.body.size || '';
-//       user.server.host_name = req.body.host_name || '';
-//       user.server.ip_address = req.body.ip_address || '';
-//       user.server.id = req.body.id || '';
-//       user.server.latest_image = req.body.latest_image || '';
-//       user.server.parent_image = req.body.parent_image || '';
+//       user..token = req.body.token || '';
+//       user..size = req.body.size || '';
+//       user..host_name = req.body.host_name || '';
+//       user..ip_address = req.body.ip_address || '';
+//       user..id = req.body.id || '';
+//       user..latest_image = req.body.latest_image || '';
+//       user..parent_image = req.body.parent_image || '';
 
 //       user.save(function (err) {
 //         if (err) return next(err);

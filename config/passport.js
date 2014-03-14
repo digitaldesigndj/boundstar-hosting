@@ -46,7 +46,7 @@ passport.use(new GoogleStrategy(secrets.google, function(req, accessToken, refre
         User.findById(req.user.id, function(err, user) {
           user.google = profile.id;
           user.tokens.push({ kind: 'google', accessToken: accessToken });
-          user.profile.name = user.profile.name || profile.displayName;
+          user.name = user.name || profile.displayName;
           user.profile.gender = user.profile.gender || profile._json.gender;
           user.profile.picture = user.profile.picture || profile._json.picture;
           user.save(function(err) {
@@ -68,7 +68,7 @@ passport.use(new GoogleStrategy(secrets.google, function(req, accessToken, refre
           user.email = profile._json.email;
           user.google = profile.id;
           user.tokens.push({ kind: 'google', accessToken: accessToken });
-          user.profile.name = profile.displayName;
+          user.name = profile.displayName;
           user.profile.gender = profile._json.gender;
           user.profile.picture = profile._json.picture;
           user.save(function(err) {
@@ -104,7 +104,7 @@ exports.isAuthorized = function(req, res, next) {
  */
 
 exports.isNotBroke = function(req, res, next) {
-  current_tokens = (Math.round(req.user.server.tokens*10)/10) - (Math.round((req.user.server.billed_seconds/3600)*10)/10);
+  current_tokens = (Math.round(req.user..tokens*10)/10) - (Math.round((req.user..billed_seconds/3600)*10)/10);
   console.log( current_tokens );
   if ( req.isAuthenticated() && 0 < current_tokens ) return next();
   req.flash('info', { msg: 'You are out of tokens' });

@@ -21,13 +21,11 @@ var connectAssets = require('connect-assets');
 var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
 var contactController = require('./controllers/contact');
-var forgotController = require('./controllers/forgot');
+
 var resetController = require('./controllers/reset');
 
-var claimController  = require('./controllers/claim');
 var adminController  = require('./controllers/admin');
 var gumhookController = require('./controllers/gumhook');
-
 var scriptController  = require('./controllers/script');
 // var digitalOceanController  = require('./controllers/digitalocean/digitalocean');
 var doEvents  = require('./controllers/digitalocean/events');
@@ -134,63 +132,32 @@ app.post('/gumroad', gumhookController.gumroadPurchaseCallback);
 app.post('/secret', gumhookController.gumroadWebhook);
 app.get('/purchase/:hash', passportConf.isAdmin, gumhookController.purchase);
 
-
-// Starbound Stuff
-
-app.get( '/claim', passportConf.isAuthenticated, claimController.claimForm );
-app.post( '/claim', passportConf.isAuthenticated, claimController.claimPlayer );
-
-app.get( '/admin', passportConf.isAdmin, adminController.getAdmin );
-app.post( '/admin', passportConf.isAdmin, adminController.postAdmin );
+app.get('/admin', passportConf.isAdmin, adminController.getAdmin);
+app.post('/admin', passportConf.isAdmin, adminController.postAdmin);
 
 // Digital Ocean Info Pages
-app.get( '/hosting', passportConf.isAdmin, doInfo.getIndex );
-app.get( '/hosting/servers', passportConf.isAdmin, doInfo.getServers );
-app.get( '/hosting/images', passportConf.isAdmin, doInfo.getImages );
-app.get( '/hosting/domains', passportConf.isAdmin, doInfo.getDomains );
-
+app.get('/hosting', passportConf.isAdmin, doInfo.getIndex);
+app.get('/hosting/servers', passportConf.isAdmin, doInfo.getServers);
+app.get('/hosting/images', passportConf.isAdmin, doInfo.getImages);
+app.get('/hosting/domains', passportConf.isAdmin, doInfo.getDomains);
 // Digital Ocean Events Pages
-app.get( '/hosting/event', passportConf.isAdmin, doEvents.getEvent );
-app.get( '/hosting/event/json', passportConf.isAdmin, doEvents.getEventJson );
-
+app.get('/hosting/event', passportConf.isAdmin, doEvents.getEvent);
+app.get('/hosting/event/json', passportConf.isAdmin, doEvents.getEventJson);
 // Digital Ocean Creation Pages
-app.get( '/hosting/make/image', passportConf.isAdmin, doMakeImage.getMakeImage );
-app.post( '/hosting/make/image', passportConf.isAdmin, doMakeImage.postMakeImage );
-//app.get( '/hosting/make/server', passportConf.isAdmin, doMakeServer.getMakeServer );
-//app.post( '/hosting/make/server', passportConf.isAdmin, doMakeServer.postMakeServer );
-
-
-
-
-app.post( '/server/boot', passportConf.isAdmin, doMakeServer.postMakeServer );
-
-
-
-
-// app.post( '/hosting/make/event', passportConf.isAdmin, digitalOceanController.postEvent );
-
-// passportConf.isNotBroke,
-app.get('/server', passportConf.isAuthenticated, serverController.getServer);
-// app.post('/server', passportConf.isAuthenticated, serverController.postUpdateServer);
-
-
-
+app.get('/hosting/make/image', passportConf.isAdmin, doMakeImage.getMakeImage);
+app.post('/hosting/make/image', passportConf.isAdmin, doMakeImage.postMakeImage);
 
 // Server Manager Event Pages
-app.post('/server/runscript', passportConf.isAuthenticated, scriptController.postScript);
-
+app.get('/server', passportConf.isAuthenticated, serverController.getServer);
 app.get('/server/powercycle', passportConf.isAuthenticated, doManageServer.dropletPowerCycle);
 app.get('/server/shutdown', passportConf.isAuthenticated, doManageServer.dropletShutdown);
 app.get('/server/poweroff', passportConf.isAuthenticated, doManageServer.dropletPowerOff);
 app.get('/server/poweron', passportConf.isAuthenticated, doManageServer.dropletPowerOn);
-
-// app.get('/server/snapshot', passportConf.isAuthenticated, doManageServer.dropletSnapshot);
-app.post('/server/snapshot', passportConf.isAuthenticated, doManageServer.dropletSnapshot);
-// app.get('/server/restore', passportConf.isAuthenticated, doManageServer.dropletRestore);
-// app.post('/server/rebuild', passportConf.isAuthenticated, doManageServer.dropletRestore);
 app.get('/server/rebuild', passportConf.isAuthenticated, doManageServer.selectImage);
-// app.post('/server/rebuild', passportConf.isAuthenticated, doManageServer.dropletRebuild);
 app.get('/server/destroy', passportConf.isAuthenticated, doManageServer.dropletDestroy);
+app.post('/server/boot', passportConf.isAdmin, doMakeServer.postMakeServer);
+app.post('/server/snapshot', passportConf.isAuthenticated, doManageServer.dropletSnapshot);
+app.post('/server/runscript', passportConf.isAuthenticated, scriptController.postScript);
 
 /**
  * Application routes.
@@ -198,14 +165,9 @@ app.get('/server/destroy', passportConf.isAuthenticated, doManageServer.dropletD
 
 app.get('/', homeController.index);
 app.get('/login', userController.getLogin);
-app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
-app.get('/forgot', forgotController.getForgot);
-app.post('/forgot', forgotController.postForgot);
 app.get('/reset/:token', resetController.getReset);
 app.post('/reset/:token', resetController.postReset);
-app.get('/signup', userController.getSignup);
-app.post('/signup', userController.postSignup);
 app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account', passportConf.isAuthenticated, userController.getAccount);

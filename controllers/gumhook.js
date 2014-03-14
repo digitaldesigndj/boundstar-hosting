@@ -32,7 +32,7 @@ exports.purchase = function( req, res ) {
           if (err) return next(err);
           // Round to tenths
           // Give 25 Tokens
-          user.server.tokens = (Math.round(10*user.server.tokens)/10)+25;
+          user..tokens = (Math.round(10*user..tokens)/10)+25;
           user.save(function (err) {
             if (err) return next(err);
             purchase.claimed = true;
@@ -86,8 +86,8 @@ exports.gumroadPurchaseCallback = function( req, res ) {
       if (err) return next(err);
       if( user != null ) {
         console.log(user);
-        user.profile.name = req.body.full_name;
-        user.server.tokens = parseFloat(Math.round(10*user.server.tokens)/10)+10;
+        user.name = req.body.full_name;
+        user..tokens = parseFloat(Math.round(10*user..tokens)/10)+10;
         purchase.claimed = true;
         purchase.save(function(err) {
           if (err) { return err; }

@@ -1,0 +1,19 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+    $('button').on('click', function() {
+        $('tbody').append("<tr><td>" + $('#name').val() + "</td><td>" + $('#status').val() + "</td></tr>");
+    });
+});
+</script>
+<input name="name" id="name" placeholder="name"/>
+<input name="status" id="status" placeholder="status" />
+<button>Add Row</button>
+<table>
+    <thead> <tr>
+        <th>Name</th> <th>Status</th>
+    </tr> </thead>
+    <tbody> <tr>
+        <td>Appleseed, Johnny</td> <td>Approved</td>
+    </tr> </tbody>
+</table>
