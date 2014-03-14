@@ -43,8 +43,9 @@ block content
             input.form-control(type='spent', name='spent', id='spent', value='#{stats.spent}', readonly)      
 
   if !droplet
-    h2.page-header To Get Started Create a Server.
-    p
+    h2.page-header To Get Started, Create a Server.
+    p 
+      strong #{stats.tokens} Tokens Remaining
       form(action='/server/boot', method='POST')
         input(type='hidden', name='_csrf', value=token)
         input(type='hidden', name='domain', value='#{user.profile.domain}')
@@ -54,8 +55,11 @@ block content
           i.fa.fa-circle-o(style='margin-left: 10px;')
           |  2x2GHz, 2GB
           i.fa.fa-circle-o(style='margin-left: 10px;')
-          |  1 Token
+          |  1 Token to Start
           i.fa.fa-circle-o(style='margin-left: 10px;')
+          |  1 Token/Hr
+          i.fa.fa-circle-o(style='margin-left: 10px;')
+    p Creating a server usually takes 55-70 seconds.
 
     //- .form-group
       ul
@@ -131,9 +135,11 @@ block content
 
     if droplet && droplet.status == 'active'
       h2.page-header Server Active - #{droplet.ip_address}
-      p Created At #{droplet.created_at}
-      p 2GB, 2x2GHz Intel @ 1 Token/hr
-      p 
+      p Go login! - #{droplet.ip_address}
+      p Created At - #{droplet.created_at}
+      p Hardware - 2GB, 2x2GHz Intel
+      p Burn Rate - 1 Token/hr
+      p
         strong #{stats.tokens} Tokens Remaining
       br
 
