@@ -19,7 +19,7 @@ block content
         if query.name
           input.form-control(type='name', name='name', id='name', placeholder='Server Name', value='#{query.name}', readonly)
         else
-          input.form-control(type='name', name='name', id='name', placeholder='Server Name', autofocus)
+          input.form-control(type='name', name='name', id='name', placeholder='Server Name')
     .form-group
       label.col-sm-3.control-label(for='password') Password
       .col-sm-7
@@ -33,3 +33,5 @@ block content
         button.btn.btn-success(type='submit')
           i.fa.fa-check
           | Signup
+
+
