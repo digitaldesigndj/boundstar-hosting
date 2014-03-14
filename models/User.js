@@ -23,7 +23,7 @@ var userSchema = new mongoose.Schema({
 
   server: {
     id: { type: String, default: '' },
-    tokens: { type: String, default: '0' },
+    tokens: { type: String, default: '3' },
     billed_seconds: { type: String, default: '0' },
     size: { type: String, default: 'small' },
     image: { type: String, default: '2629230' }, //Starbound with htop
