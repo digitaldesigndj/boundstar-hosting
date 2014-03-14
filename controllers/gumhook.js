@@ -13,7 +13,7 @@ var User = require('../models/User');
 
 
 exports.gumroadWebhook = function( req, res ) {
-  if (req.user) return res.redirect('/?todo=AccountFoundAndWillBeCreditedThanksPage');
+  if (req.user) return res.redirect('/thanks');
   res.set('Content-Type', 'text/plain');
   return res.send("http://" + req.header('host') + "/signup?email=" + req.body.email );//+ "&name=" + req.body.full_name);
 }
@@ -31,8 +31,8 @@ exports.purchase = function( req, res ) {
         User.findById(req.user.id, function (err, user) {
           if (err) return next(err);
           // Round to tenths
-          // Give 10 Tokens
-          user.server.tokens = (Math.round(10*user.server.tokens)/10)+10;
+          // Give 25 Tokens
+          user.server.tokens = (Math.round(10*user.server.tokens)/10)+25;
           user.save(function (err) {
             if (err) return next(err);
             purchase.claimed = true;
