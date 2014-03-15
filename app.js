@@ -132,7 +132,7 @@ app.use(express.errorHandler());
 
 app.post('/gumroad', gumhookController.gumroadPurchaseCallback);
 app.post('/secret', gumhookController.gumroadWebhook);
-app.get('/purchase/:hash', passportConf.isAdmin, gumhookController.purchase);
+app.get('/purchase/:hash', passportConf.isAuthenticated, gumhookController.purchase);
 
 
 // Starbound Stuff
@@ -140,8 +140,8 @@ app.get('/purchase/:hash', passportConf.isAdmin, gumhookController.purchase);
 app.get( '/claim', passportConf.isAuthenticated, claimController.claimForm );
 app.post( '/claim', passportConf.isAuthenticated, claimController.claimPlayer );
 
-app.get( '/admin', passportConf.isAdmin, adminController.getAdmin );
-app.post( '/admin', passportConf.isAdmin, adminController.postAdmin );
+app.get( '/admin', passportConf.isAuthenticated, adminController.getAdmin );
+app.post( '/admin', passportConf.isAuthenticated, adminController.postAdmin );
 
 // Digital Ocean Info Pages
 app.get( '/hosting', passportConf.isAdmin, doInfo.getIndex );
@@ -150,19 +150,19 @@ app.get( '/hosting/images', passportConf.isAdmin, doInfo.getImages );
 app.get( '/hosting/domains', passportConf.isAdmin, doInfo.getDomains );
 
 // Digital Ocean Events Pages
-app.get( '/hosting/event', passportConf.isAdmin, doEvents.getEvent );
-app.get( '/hosting/event/json', passportConf.isAdmin, doEvents.getEventJson );
+app.get( '/hosting/event', passportConf.isAuthenticated, doEvents.getEvent );
+app.get( '/hosting/event/json', passportConf.isAuthenticated, doEvents.getEventJson );
 
 // Digital Ocean Creation Pages
-app.get( '/hosting/make/image', passportConf.isAdmin, doMakeImage.getMakeImage );
-app.post( '/hosting/make/image', passportConf.isAdmin, doMakeImage.postMakeImage );
+app.get( '/hosting/make/image', passportConf.isAuthenticated, doMakeImage.getMakeImage );
+app.post( '/hosting/make/image', passportConf.isAuthenticated, doMakeImage.postMakeImage );
 //app.get( '/hosting/make/server', passportConf.isAdmin, doMakeServer.getMakeServer );
 //app.post( '/hosting/make/server', passportConf.isAdmin, doMakeServer.postMakeServer );
 
 
 
 
-app.post( '/server/boot', passportConf.isAdmin, doMakeServer.postMakeServer );
+app.post( '/server/boot', passportConf.isAuthenticated, doMakeServer.postMakeServer );
 
 
 
