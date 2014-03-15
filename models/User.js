@@ -12,13 +12,23 @@ var userSchema = new mongoose.Schema({
   // github: { type: String, unique: true, sparse: true },
   tokens: Array,
 
-  name: { type: String, default: '' },
+  profile: {
+    name: { type: String, default: '' },
+    domain: { type: String, default: '', unique: true },
+    gender: { type: String, default: '' },
+    location: { type: String, default: '' },
+    website: { type: String, default: '' },
+    picture: { type: String, default: '' }
+  },
 
-  id: { type: String, default: '' },
-  tokens: { type: String, default: '3' },
-  billed_seconds: { type: String, default: '0' },
-  image: { type: String, default: '2629230' }, //Starbound with htop
-  server_password: { type: String, default: '' },
+  server: {
+    id: { type: String, default: '' },
+    tokens: { type: String, default: '3' },
+    billed_seconds: { type: String, default: '0' },
+    size: { type: String, default: 'small' },
+    image: { type: String, default: '2629230' }, //Starbound with htop
+    password: { type: String, default: '' },
+  },
 
   resetPasswordToken: String,
   resetPasswordExpires: Date

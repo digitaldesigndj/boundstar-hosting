@@ -44,13 +44,13 @@ exports.postScript = function (req, res) {
     });
   }
   if( script === 'password' ) {
-    starboundConfig.serverPasswords = [req.body.server_password];
+    starboundConfig.serverPasswords = [req.body.password];
     // console.log( starboundConfig )
     fs.writeFileSync( secrets.server_script_path + '/starbound.config', JSON.stringify( starboundConfig , null, 2 ) );
     command = 'scp ' + secrets.server_script_path + '/starbound.config root@' + req.body.ip_address + ':/root/starbound/starbound.config;bash ' + secrets.server_script_path + '/remote.sh root@' + req.body.ip_address + " 'service starbound restart'";
     User.findById( req.user.id, function (err, user) {
       if (err) return next(err);
-      user..password = req.body.password || '';
+      user.server.password = req.body.password || '';
       user.save(function (err) {
         if (err) return next(err);
         exec(command, function (error, stdout, stderr) { 

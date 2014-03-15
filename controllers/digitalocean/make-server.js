@@ -23,7 +23,7 @@ exports.postMakeServer = function (req, res) {
   var image = '2629230';
   // Create Droplet
   // Cant start new server!
-  if( req.user..image !== '' ) { image = req.user..image; }
+  if( req.user.server.image !== '' ) { image = req.user.server.image; }
   api.dropletNew( req.user.profile.domain + '.starbound.today', 62, image, 4, {'ssh_key_ids': '87061,69732,93888'}, function ( err, response ){
     if( err ) { res.send( err ); }
     console.log( response );
@@ -37,15 +37,15 @@ exports.postMakeServer = function (req, res) {
         
         User.findById(req.user.id, function (err, user) {
           if (err) return next(err);
-          user..id = droplet.id || '';
-          // req.user..token = req.body.token || '';
+          user.server.id = droplet.id || '';
+          // req.user.server.token = req.body.token || '';
           // Subtract a token for spinning up the server
-          user..tokens = req.user..tokens - 1;
-          user..image = req.body.image || '2629230';
-          user..size = droplet.size_id || '';
-          user..host_name = droplet.name || '';
-          user..ip_address = droplet.ip_address || '';
-          user..snapshots = JSON.stringify(droplet.snapshots) || '';
+          user.server.tokens = req.user.server.tokens - 1;
+          user.server.image = req.body.image || '2629230';
+          user.server.size = droplet.size_id || '';
+          user.server.host_name = droplet.name || '';
+          user.server.ip_address = droplet.ip_address || '';
+          user.server.snapshots = JSON.stringify(droplet.snapshots) || '';
           user.save(function (err) {
             if (err) return next(err);
             req.flash('success', { msg: 'Booting Up A Server!' });

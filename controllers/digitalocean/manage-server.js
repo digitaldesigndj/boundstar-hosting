@@ -6,8 +6,8 @@ var _ = require('underscore');
 var User = require('../../models/User');
 
 exports.dropletPowerCycle = function(req, res) {
-  console.log( req.user..id );
-  api.dropletPowerCycle( req.user..id, function (err, event) {
+  console.log( req.user.server.id );
+  api.dropletPowerCycle( req.user.server.id, function (err, event) {
     if (err) return err;
     req.flash('success', { msg: JSON.stringify(event) + " - your event is processing, refresh the page in 10 seconds" });
     res.redirect('/server');
@@ -16,8 +16,8 @@ exports.dropletPowerCycle = function(req, res) {
 };
 
 exports.dropletShutdown = function(req, res) {
-  console.log( req.user..id );
-  api.dropletShutdown( req.user..id, function (err, event) {
+  console.log( req.user.server.id );
+  api.dropletShutdown( req.user.server.id, function (err, event) {
     if (err) return err;
     req.flash('success', { msg: JSON.stringify(event) + " - your event is processing, refresh the page in 10 seconds" });
     res.redirect('/server');
@@ -26,8 +26,8 @@ exports.dropletShutdown = function(req, res) {
 };
 
 exports.dropletPowerOff = function(req, res) {
-  console.log( req.user..id );
-  api.dropletPowerOff( req.user..id, function (err, event) {
+  console.log( req.user.server.id );
+  api.dropletPowerOff( req.user.server.id, function (err, event) {
     if (err) return err;
     req.flash('success', { msg: JSON.stringify(event) + " POWEROFF - Takes about 10 Seconds" });
     res.redirect('/server');
@@ -36,8 +36,8 @@ exports.dropletPowerOff = function(req, res) {
 };
 
 exports.dropletPowerOn = function(req, res) {
-  console.log( req.user..id );
-  api.dropletPowerOn( req.user..id, function (err, event) {
+  console.log( req.user.server.id );
+  api.dropletPowerOn( req.user.server.id, function (err, event) {
     if (err) return err;
     req.flash('success', { msg: JSON.stringify(event) + " POWERON - Takes about 20 Seconds, then another 30 for StarBound to start." });
     res.redirect('/server');
@@ -51,7 +51,7 @@ exports.dropletSnapshot = function(req, res) {
 
     // user.profile.bil
 
-    api.dropletSnapshot( user..id, { name: user.profile.domain }, function (err, event_id) {
+    api.dropletSnapshot( user.server.id, { name: user.profile.domain }, function (err, event_id) {
       if (err) return err;
       api.eventGet(event_id, function ( error, event ) {
         req.flash('success', { msg: JSON.stringify(event) + " - your event is processing, this usually takes about 10 min." });
@@ -63,9 +63,9 @@ exports.dropletSnapshot = function(req, res) {
 };
 
 // exports.dropletRestore = function(req, res) {
-//   console.log( req.user..image );
+//   console.log( req.user.server.image );
 
-//   // api.dropletRestore( req.user..id, req.user..image, function (err, event) {
+//   // api.dropletRestore( req.user.server.id, req.user.server.image, function (err, event) {
 //   //   if (err) return err;
 //   //   req.flash('success', { msg: JSON.stringify(event) + " - your event is processing, refresh the page in 10 seconds" });
 //   //   res.redirect('/server');
@@ -74,8 +74,8 @@ exports.dropletSnapshot = function(req, res) {
 // };
 
 // exports.dropletRebuild = function(req, res) {
-//   console.log( req.user..id );
-//   api.dropletRebuild( req.user..id, function (err, event) {
+//   console.log( req.user.server.id );
+//   api.dropletRebuild( req.user.server.id, function (err, event) {
 //     if (err) return err;
 //     req.flash('success', { msg: JSON.stringify(event) + " - your event is processing, refresh the page in 10 seconds" });
 //     res.redirect('/server');
@@ -86,7 +86,7 @@ exports.dropletSnapshot = function(req, res) {
 exports.dropletDestroy = function(req, res) {
   User.findById(req.user.id, function (err, user) {
     if (err) return next(err);
-    api.dropletGet( user..id, function (err, droplet) {
+    api.dropletGet( user.server.id, function (err, droplet) {
       if (err) return err;
       // Save a billing entry here
       var created_time = new Date(droplet.created_at).getTime()/1000;
@@ -94,10 +94,10 @@ exports.dropletDestroy = function(req, res) {
       var server_lifetime =  current_time - created_time;
       console.log( 'Server Destroyed' );
       console.log( created_time, current_time, server_lifetime );
-      api.dropletDestroy( user..id, function (err, event) {
+      api.dropletDestroy( user.server.id, function (err, event) {
         if (err) return err;
-        user..id = '';
-        user..billed_seconds = Math.round(user..billed_seconds) + Math.round(server_lifetime);
+        user.server.id = '';
+        user.server.billed_seconds = Math.round(user.server.billed_seconds) + Math.round(server_lifetime);
         user.save(function (err) {
           if (err) return next(err);
           req.flash('warning', { msg: "SERVER DESTROYED" });

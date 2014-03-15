@@ -49,7 +49,7 @@ block content
       form(action='/server/boot', method='POST')
         input(type='hidden', name='_csrf', value=token)
         input(type='hidden', name='domain', value='#{user.profile.domain}')
-        button.btn.btn-success(type='submit')
+        button.btn.btn-primary(type='submit')
           i.fa.fa-gamepad
           |  Vanilla Starbound
           i.fa.fa-circle-o(style='margin-left: 10px;')
@@ -74,44 +74,44 @@ block content
         .form-group
           label.col-sm-2.control-label(for='name') Name
           .col-sm-4
-            input.form-control(type='text', name='name', id='name', value='#{user.name}', readonly)
+            input.form-control(type='text', name='name', id='name', value='#{user.profile.name}', readonly)
         .form-group
           label.col-sm-2.control-label(for='tokens') Tokens
           .col-sm-4
-            input.form-control(type='tokens', name='tokens', id='tokens', value='#{user..tokens}', readonly)
+            input.form-control(type='tokens', name='tokens', id='tokens', value='#{user.server.tokens}', readonly)
         .form-group
           label.col-sm-2.control-label(for='billed_seconds') Billed Seconds
           .col-sm-4
-            input.form-control(type='billed_seconds', name='billed_seconds', id='billed_seconds', value='#{user..billed_seconds}', readonly)
+            input.form-control(type='billed_seconds', name='billed_seconds', id='billed_seconds', value='#{user.server.billed_seconds}', readonly)
         .form-group
           label.col-sm-2.control-label(for='size') Size
           .col-sm-4
-            if user..size == '66'
+            if user.server.size == '66'
               input.form-control(type='text', name='size', id='size', value='512MB', readonly)
-            else if user..size == '62'
+            else if user.server.size == '62'
               input.form-control(type='text', name='size', id='size', value='2GB', readonly)
             else
-              input.form-control(type='text', name='size', id='size', value='#{user..size}', readonly)
+              input.form-control(type='text', name='size', id='size', value='#{user.server.size}', readonly)
         //- .form-group
           label.col-sm-2.control-label(for='host_name') Hostname
           .col-sm-4
-            input.form-control(type='text', name='host_name', id='host_name', value='#{user..host_name}', readonly)
+            input.form-control(type='text', name='host_name', id='host_name', value='#{user.server.host_name}', readonly)
         //- .form-group
           label.col-sm-2.control-label(for='ip_address') IP Address
           .col-sm-4
-            input.form-control(type='text', name='ip_address', id='ip_address', value='#{user..ip_address}', readonly)
+            input.form-control(type='text', name='ip_address', id='ip_address', value='#{user.server.ip_address}', readonly)
         .form-group
           label.col-sm-2.control-label(for='id') ID
           .col-sm-4
-            input.form-control(type='text', name='id', id='id', value='#{user..id}', readonly)
+            input.form-control(type='text', name='id', id='id', value='#{user.server.id}', readonly)
         .form-group
           label.col-sm-2.control-label(for='image') Image
           .col-sm-4
-            input.form-control(type='text', name='image', id='image', value='#{user..image}', readonly)
+            input.form-control(type='text', name='image', id='image', value='#{user.server.image}', readonly)
         //- .form-group
           label.col-sm-2.control-label(for='snapshots') Snapshots
           .col-sm-4
-            input.form-control(type='text', name='snapshots', id='snapshots', value='#{JSON.stringify(user..snapshots)}', readonly)
+            input.form-control(type='text', name='snapshots', id='snapshots', value='#{JSON.stringify(user.server.snapshots)}', readonly)
         //- .form-group
           .col-sm-offset-2.col-sm-4
             button.btn.btn.btn-primary(type='submit')
@@ -154,12 +154,12 @@ block content
       p Set your server password, leave blank to make public, this will restart StarBound.
         form.form-horizontal(action='/server/runscript', method='POST')
           input(type='hidden', name='_csrf', value=token)
-          input(type='hidden', name='script', value='server_password')
+          input(type='hidden', name='script', value='password')
           input(type='hidden', name='ip_address', value='#{droplet.ip_address}')
           .form-group
-            label.col-sm-2.control-label(for='server_password') Server Password
+            label.col-sm-2.control-label(for='password') Server Password
             .col-sm-4
-              input.form-control(name='server_password', value='#{user._password}')
+              input.form-control(name='password', value='#{user.server.password}')
           .form-group
             .col-sm-offset-2.col-sm-4
               button.btn.btn-success(type='submit')
@@ -168,8 +168,8 @@ block content
 
       //- if droplet
       //-   h2.page-header Server Image (Your Backup Slot)
-      //- if user..image
-      //-   p Your Image Number Is: #{user..image}
+      //- if user.server.image
+      //-   p Your Image Number Is: #{user.server.image}
       //- if image
       //-   p=JSON.stringify(image)
       //-   p You need to shutdown the server before you can take a new image.
@@ -211,30 +211,30 @@ block content
       //- p
         form(action='/server/snapshot', method='POST')
           input(type='hidden', name='_csrf', value=token)
-          //- input(type='hidden', name='name', value='#{user.name}')
-          //- input(type='hidden', name='image', value='#{user..image}')
+          //- input(type='hidden', name='name', value='#{user.profile.name}')
+          //- input(type='hidden', name='image', value='#{user.server.image}')
           button.btn.btn-info(type='submit')
             i.fa.fa-save
             | Take A New Image
-      //- if user..image != '2629230'
+      //- if user.server.image != '2629230'
         .page-header
           h2 You have a saved server image (beta)
               .page-header
-          h2 Restore Your Server Image - #{user..image}
+          h2 Restore Your Server Image - #{user.server.image}
         form(action='/server/boot', method='POST')
           input(type='hidden', name='_csrf', value=token)
           input(type='hidden', name='name', value='#{user.profile.domain}')
-          input(type='hidden', name='image', value='#{user..image}')
+          input(type='hidden', name='image', value='#{user.server.image}')
           button.btn.btn-primary(type='submit')
             i.fa.fa-cogs
             |  Restore Server
 
-    //- if !droplet && user..image
-    if user..image === '' && user..id !== '' && droplet.status == 'off'    
+    //- if !droplet && user.server.image
+    if user.server.image === '' && user.server.id !== '' && droplet.status == 'off'    
       p You have to take your first server image before you can destory your droplet and stop spending tokens.
       P Taking an image will bring your server back up. Just shut it down again.
 
-    if user..image && user..id !== '' && droplet.status == 'off'
+    if user.server.image && user.server.id !== '' && droplet.status == 'off'
       h2
       p
         form(action='/server/destroy', method='GET')
@@ -242,7 +242,7 @@ block content
             i.fa.fa-fire
             | Destroy Server
 
-    //- if !droplet && user..image
+    //- if !droplet && user.server.image
 
 
       //- .page-header
@@ -258,7 +258,7 @@ block content
     br
 
 
-    //- if droplet && droplet.status == 'off' && JSON.stringify(user..snapshots) != '[]'
+    //- if droplet && droplet.status == 'off' && JSON.stringify(user.server.snapshots) != '[]'
     //-   p
     //-     a(href='/server/boot')
     //-       button.btn.btn-primary Restore Server
