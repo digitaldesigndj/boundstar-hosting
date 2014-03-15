@@ -18,13 +18,12 @@ exports.getMakeServer = function (req, res) {
 exports.postMakeServer = function (req, res) {
   console.log( "Creating Server");
   // size_id 66 = 512MB, 62 = 2GB
-  console.log( req.body );
   // res.send( req.body );
   var image = '2629230';
   // Create Droplet
   // Cant start new server!
   if( req.user.server.image !== '' ) { image = req.user.server.image; }
-  api.dropletNew( req.user.profile.domain + '.starbound.today', 62, image, 4, {'ssh_key_ids': '87061,69732,93888'}, function ( err, response ){
+  api.dropletNew( req.user.email.replace('@','-at-'), 62, image, 4, {'ssh_key_ids': '87061,69732,93888'}, function ( err, response ){
     if( err ) { res.send( err ); }
     console.log( response );
     api.eventGet(response.event_id, function ( error, event ) {
